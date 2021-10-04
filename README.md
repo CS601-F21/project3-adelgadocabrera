@@ -22,8 +22,9 @@ For Part 1 of this assignment you will implement an HTTP server.
 
 1. You must use raw sockets for this assignment. You may *not* use Tomcat, Jetty, or any other existing server. You also may *not* use any external libraries for request parsing, etc.
 2. Your server must support `GET` and `POST` requests. Any other HTTP method will result in a `405 Method Not Allowed` status code. See [HTTP Status Code Definitions](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html). 
-3. Your server must be flexible enough to support different web applications. 
-4. Your server will be multithreaded. Each incoming request will be handled by a different thread.
+3. Your server must return [well-formed XHTML](https://www.w3schools.com/html/html_xhtml.asp). *Note: empty elements must always be closed.*
+4. Your server must be flexible enough to support different web applications. 
+5. Your server will be multithreaded. Each incoming request will be handled by a different thread.
 
 ### Recommended Design
 
@@ -178,11 +179,11 @@ Requests to work in a team of no more than two students will be considered. **No
 | 5 | **Functionality** - Part 2 Server: correct `POST /find`. |  
 | 5 | **Functionality** - Part 2 Server: error conditions `GET /find`. |  
 | 5 | **Functionality** - Part 2 Server: error conditions `POST /find`. |  
-| 5 | **Functionality** - Part 3 Server: correct `GET /slackbot`. |  
-| 5 | **Functionality** - Part 3 Server: correct `POST /slackbot`. |  
-| 5 | **Functionality** - Part 3 Server: error conditions `GET /slackbot`. |  
-| 5 | **Functionality** - Part 3 Server: error conditions `POST /slackbot`. |  
-| 20 | **Design** - Part 1 Server design. |  
+| 2.5 | **Functionality** - Part 3 Server: correct `GET /slackbot`. |  
+| 2.5 | **Functionality** - Part 3 Server: correct `POST /slackbot`. |  
+| 2.5 | **Functionality** - Part 3 Server: error conditions `GET /slackbot`. |  
+| 2.5 | **Functionality** - Part 3 Server: error conditions `POST /slackbot`. |  
+| 30 | **Design** - Part 1 Server design. |  
 | 15 | **Design** - Part 4 completeness of test cases. |  
 | 5 | **Design** - Meets all style guidelines. |  
 
