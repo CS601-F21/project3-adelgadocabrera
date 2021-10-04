@@ -183,8 +183,9 @@ Requests to work in a team of no more than two students will be considered. **No
 | 2.5 | **Functionality** - Part 3 Server: correct `POST /slackbot`. |  
 | 2.5 | **Functionality** - Part 3 Server: error conditions `GET /slackbot`. |  
 | 2.5 | **Functionality** - Part 3 Server: error conditions `POST /slackbot`. |  
-| 30 | **Design** - Part 1 Server design. |  
+| 25 | **Design** - Part 1 Server design. |  
 | 15 | **Design** - Part 4 completeness of test cases. |  
+| 5 | **Design** - Github usage and commit history. |  
 | 5 | **Design** - Meets all style guidelines. |  
 
 ## Academic Dishonesty
