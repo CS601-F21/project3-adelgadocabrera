@@ -1,8 +1,6 @@
 Project 3 - HTTP Server
 =======================
 
-**This description is incomplete and will change.**
-
 
 ### Due - Thursday, November 4, 2021 - 9:55am
 
@@ -152,7 +150,7 @@ The only external libraries you may use for this assignment are [GSON](https://g
 
 ## Team Option
 
-Requests to work in a team of no more than two students will be considered. **No one may work as a team until your request is formally approved by the instructor*. If you are interested in a team option *both members of the team must come to office hour on Oct 20 or 21* with a proposed work distribution and collaboration plan. The instructor will approve or decline requests made by October 21.
+Requests to work in a team of no more than two students will be considered. *No one may work as a team until your request is formally approved by the instructor*. If you are interested in a team option *both members of the team must come to office hour on Oct 20 or 21* with a proposed work distribution and collaboration plan. The instructor will approve or decline requests made by October 21.
 
 ## Submission
 
