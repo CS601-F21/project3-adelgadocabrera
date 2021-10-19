@@ -1,5 +1,7 @@
 package com.cs601.project3.server.controllers;
 
+import com.cs601.project3.server.models.Router;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,10 +27,15 @@ public class Server {
         this.router = router;
     }
 
-    public void use(Runnable middleware) {
+    // idea to implement middleware
+    // currently not required, but could be interesting
+//    public void use(Runnable middleware) {
+//
+//    }
 
-    }
-
+    // to add routes directly to server
+    // would have to handle conflicts with router
+    // currently not required
 //    public void use(CRUD operation, String path, Runnable callback){ try {
 //            router.createHandler(operation, path, callback);
 //        } catch(IllegalAccessException e){

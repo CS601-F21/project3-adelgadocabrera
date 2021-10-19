@@ -1,9 +1,7 @@
-package com.cs601.project3.server.controllers;
+package com.cs601.project3.server.models;
 
 
-import com.cs601.project3.server.models.CRUD;
-
-class Handler {
+public class Handler {
     private CRUD operation;
     private String path;
     private Runnable callback;

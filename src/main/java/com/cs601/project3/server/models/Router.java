@@ -1,6 +1,4 @@
-package com.cs601.project3.server.controllers;
-
-import com.cs601.project3.server.models.CRUD;
+package com.cs601.project3.server.models;
 
 import java.util.HashMap;
 
@@ -15,8 +13,6 @@ public class Router {
         }
     }
 
-    ;
-
     public void post(String path, Runnable callback, String query) {
         try {
             createHandler(CRUD.POST, path, callback);
@@ -24,8 +20,6 @@ public class Router {
             e.printStackTrace();
         }
     }
-
-    ;
 
     public void createHandler(CRUD operation, String path, Runnable callback) throws IllegalAccessException {
         if (routes.containsKey(path)) throw new IllegalAccessException("Route " + path + " already exists");
