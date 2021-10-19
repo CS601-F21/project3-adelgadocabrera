@@ -1,13 +1,10 @@
 package com.cs601.project3.server.controllers;
 
-import com.cs601.project3.server.models.CRUD;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.function.Function;
 
 public class Server {
     ServerSocket server;
@@ -24,20 +21,23 @@ public class Server {
     }
 
     public void use(Router router) throws IllegalAccessException {
-        if(router != null) throw new IllegalAccessException("Your server already has a router");
-       this.router = router;
+        if (router != null) throw new IllegalAccessException("Your server already has a router");
+        this.router = router;
     }
 
-    public void use(CRUD operation, String path, Runnable callback){
-        try {
-            router.createHandler(operation, path, callback);
-        } catch(IllegalAccessException e){
-            e.printStackTrace();
-        }
+    public void use(Runnable middleware) {
+
     }
 
-    public void run(){
-        while(running) {
+//    public void use(CRUD operation, String path, Runnable callback){ try {
+//            router.createHandler(operation, path, callback);
+//        } catch(IllegalAccessException e){
+//            e.printStackTrace();
+//        }
+//    }
+
+    public void run() {
+        while (running) {
             //try with resources ensures socket will be closed
             try (
                     //block on accept until a new client connects
@@ -52,7 +52,7 @@ public class Server {
                 String line = instream.readLine();
 
                 //keep reading until end of transmission
-                while(line != null && !line.trim().equals(EOT)) {
+                while (line != null && !line.trim().equals(EOT)) {
                     //append to message
                     message += line + "\n";
                     //read next line
@@ -62,7 +62,7 @@ public class Server {
                 //display client message
                 System.out.println("Client says: " + message);
 
-            } catch(IOException ioe) {
+            } catch (IOException ioe) {
                 ioe.printStackTrace();
             }
         }

@@ -6,21 +6,26 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class HandlerTest {
     final CRUD operation = CRUD.GET;
     final String path = "/chat";
     Handler correctHandler;
     Handler incorrectHandler;
 
-    void helloWorld(){
-        System.out.println("hello world!");
+    final String CALLBACK_OUTPUT = "OUTPUT";
+    String callbackOutput = "";
+
+    private class RunnableExample implements Runnable {
+
+        @Override
+        public void run() {
+            callbackOutput = "OUTPUT";
+        }
     }
 
     @BeforeEach
     void setUp() {
-        correctHandler = new Handler(operation, "/", null);
+        correctHandler = new Handler(operation, "/chat", new RunnableExample());
         incorrectHandler = new Handler(null, null, null);
     }
 
@@ -34,5 +39,38 @@ class HandlerTest {
     @DisplayName("Should pass path correctly")
     void getPath() {
         Assertions.assertEquals(path, correctHandler.getPath());
+    }
+
+    @Test
+    @DisplayName("Should have null operation type")
+    void getNullOperation() {
+        Assertions.assertNull(incorrectHandler.getOperation());
+    }
+
+    @Test
+    @DisplayName("Should have null path")
+    void getNullPath() {
+        Assertions.assertNull(incorrectHandler.getPath());
+    }
+
+    @Test
+    @DisplayName("Should update callbackOutput variable correctly")
+    void runnableWorks() {
+        Thread t1 = new Thread(correctHandler.getCallback());
+        t1.start();
+
+        try {
+            t1.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Assertions.assertEquals(CALLBACK_OUTPUT, callbackOutput);
+    }
+
+    @Test
+    @DisplayName("Should have null Runnable callback")
+    void nullRunnable() {
+        Assertions.assertNull(incorrectHandler.getCallback());
     }
 }
