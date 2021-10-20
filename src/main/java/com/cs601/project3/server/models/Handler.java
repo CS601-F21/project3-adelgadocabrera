@@ -4,12 +4,12 @@ package com.cs601.project3.server.models;
 public class Handler {
     private CRUD operation;
     private String path;
-    private Runnable callback;
+    private Runnable GETCallback;
+    private Runnable POSTCallback;
 
-    public Handler(CRUD operation, String path, Runnable callback) {
+    public Handler(CRUD operation, String path) {
         this.operation = operation;
         this.path = path;
-        this.callback = callback;
     }
 
     public CRUD getOperation() {
@@ -20,7 +20,19 @@ public class Handler {
         return path;
     }
 
-    public Runnable getCallback() {
-        return callback;
+    public void setGETCallback(Runnable callback) {
+        GETCallback = callback;
+    }
+
+    public void setPOSTCallback(Runnable callback) {
+        POSTCallback = callback;
+    }
+
+    public Runnable getGETCallback() {
+        return GETCallback;
+    }
+
+    public Runnable getPOSTCallback() {
+        return POSTCallback;
     }
 }
