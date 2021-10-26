@@ -8,10 +8,17 @@ import java.io.IOException;
 class ClientRequestTest {
     @Test
     void clientRequest() throws IOException {
-        final String expectedResponse = "{  \"userId\": 1,  \"id\": 1,  \"title\": \"delectus aut autem\",  \"completed\": false}";
+        final String expectedResponse = """
+                {
+                  "userId": 1,
+                  "id": 1,
+                  "title": "delectus aut autem",
+                  "completed": false
+                }
+                """;
         String jsonPlaceholderApi = "https://jsonplaceholder.typicode.com/todos/1";
-        String response = ClientRequest.fetch(jsonPlaceholderApi);
+        ClientResponse response = ClientRequest.get(jsonPlaceholderApi);
 
-        Assertions.assertEquals(expectedResponse, response);
+        Assertions.assertEquals(expectedResponse, response.body);
     }
 }

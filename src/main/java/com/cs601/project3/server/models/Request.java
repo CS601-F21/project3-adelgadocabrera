@@ -5,12 +5,14 @@ public class Request {
     String path;
     String protocol;
     String headers;
+    String body;
 
-    public Request(CRUD operation, String path, String protocol, String headers) {
+    public Request(CRUD operation, String path, String protocol, String headers, String body) {
         this.operation = operation;
         this.path = path;
         this.protocol = protocol;
         this.headers = headers;
+        this.body = body;
     }
 
     public CRUD getOperation() {
@@ -27,6 +29,10 @@ public class Request {
 
     public String getHeaders() {
         return headers;
+    }
+
+    public String getBody() {
+        return body;
     }
 
     @Override

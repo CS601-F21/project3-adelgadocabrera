@@ -2,37 +2,31 @@ package com.cs601.project3.server.models;
 
 
 public class Handler {
-    private CRUD operation;
-    private String path;
-    private Runnable GETCallback;
-    private Runnable POSTCallback;
+    private final String path;
+    private HttpLambdaHandler GETCallback;
+    private HttpLambdaHandler POSTCallback;
 
-    public Handler(CRUD operation, String path) {
-        this.operation = operation;
+    public Handler(String path) {
         this.path = path;
-    }
-
-    public CRUD getOperation() {
-        return operation;
     }
 
     public String getPath() {
         return path;
     }
 
-    public void setGETCallback(Runnable callback) {
+    public void setGETCallback(HttpLambdaHandler callback) {
         GETCallback = callback;
     }
 
-    public void setPOSTCallback(Runnable callback) {
+    public void setPOSTCallback(HttpLambdaHandler callback) {
         POSTCallback = callback;
     }
 
-    public Runnable getGETCallback() {
+    public HttpLambdaHandler getGETCallback() {
         return GETCallback;
     }
 
-    public Runnable getPOSTCallback() {
+    public HttpLambdaHandler getPOSTCallback() {
         return POSTCallback;
     }
 }

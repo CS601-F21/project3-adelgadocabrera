@@ -9,13 +9,29 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
-public class Server {
-    ServerSocket server;
-    Router router = null;
-    static volatile boolean running = true;
-    private final String PROHIBITED_CRUD_ERROR = "Only GET and POST operations are allowed";
-    private final String ADD_ROUTER_ERROR = "Your server already has a router";
+/**
+ * @author Alberto Delgado
+ * <p>
+ * Server is runnable but not necessarily has to ran in separate thread.
+ * It is made runnable to it CAN be ran in separate thread.
+ */
+public class Server implements Runnable {
+    // server properties
+    private volatile boolean running = true;
+    private ServerSocket server;
+    private Router router = new Router();
+
+    // threads
+    private final int THREAD_POOL_TIMEOUT = 30; // in seconds
+    private final ExecutorService threadPool = Executors.newFixedThreadPool(10);
+
+    // error messages
+    final String OPERATION_NOT_ALLOWED_ERROR = "Only GET and POST operations are allowed";
+    final String PATH_NOT_FOUND_ERROR = "<h3>Path does not exist.</h3>";
 
     public Server(int port) {
         try {
@@ -25,64 +41,115 @@ public class Server {
         }
     }
 
-    public void use(Router router) throws IllegalAccessException {
-        if (this.router != null) throw new IllegalAccessException(ADD_ROUTER_ERROR);
+    /**
+     * It is possible to create a Router manually instead of using
+     * the one created by default in the server.
+     * <p>
+     * By adding the external router it will completely replace
+     * the default one. This is expected behavior.
+     *
+     * @param router
+     */
+    public void use(Router router) {
         this.router = router;
     }
 
-    public void run() throws IllegalAccessException {
+    @Override
+    public void run() {
         while (running) {
-            try (
-                    Socket sock = server.accept();
-                    BufferedReader instream = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-                    OutputStream outputStream = sock.getOutputStream()
-            ) {
-                // Read request
-                StringBuilder headers = new StringBuilder();
-                String requestLine = instream.readLine();
-
-                String line = instream.readLine();
-                while (line != null && !line.trim().isEmpty()) {
-                    headers.append(line).append("\n");
-                    line = instream.readLine();
-                }
-
-                // Parse Request
-                Request request = RequestParser.get(requestLine, headers.toString());
-                if (!isValidCRUDRequest(request)) {
-                    throw new IllegalAccessException(PROHIBITED_CRUD_ERROR);
-                }
-
-                // Get Handler
-                Handler handler = getHandler(request.getPath());
-
-                // Handle PATH NOT FOUND
-                if (handler == null) {
-                    String response = Html.build("<h1>Oops! Something went wrong!</h1>");
-                    outputStream.write(new Response(HTTPHeader.HTTP_NOT_FOUND, response).getBytes());
-                    continue;
-                }
-
-                // Execute handler callback in thread
-                Thread t = new Thread(getCallback(request.getOperation(), handler));
-                t.start();
-                try {
-                    t.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                String body = "<h1>Alberto is on fire!<h2>";
-                Response response = new Response(HTTPHeader.HTTP_OK, Html.build(body));
-                outputStream.write(response.getBytes());
-
+            try {
+                Socket sock = server.accept();
+                threadPool.execute(() -> serverLogic(sock));
             } catch (IOException e) {
-                e.printStackTrace();
+                System.err.println("Server closed!");
             }
         }
     }
 
-    private Runnable getCallback(CRUD operation, Handler handler) {
+    public void get(String path, HttpLambdaHandler callback) {
+        router.createHandler(CRUD.GET, path, callback);
+    }
+
+    public void get(String path, HttpHandler callback) {
+        router.createHandler(CRUD.GET, path, callback);
+    }
+
+    public void post(String path, HttpLambdaHandler callback) {
+        router.createHandler(CRUD.POST, path, callback);
+    }
+
+    public void post(String path, HttpHandler callback) {
+        router.createHandler(CRUD.POST, path, callback);
+    }
+
+
+    public void shutdown() throws InterruptedException, IOException {
+        running = false;
+        threadPool.shutdown();
+        if (!threadPool.awaitTermination(THREAD_POOL_TIMEOUT, TimeUnit.SECONDS)) {
+            System.err.println("Thread didn't finish in " + THREAD_POOL_TIMEOUT + " seconds");
+        }
+        server.close();
+    }
+
+    private void serverLogic(Socket sock) {
+        try (
+                BufferedReader instream = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+                OutputStream outputStream = sock.getOutputStream()
+        ) {
+            // Create Request && Response objects
+            Request request = getRequest(instream);
+            Response response = new Response(outputStream);
+
+            // Only accept GET/POST
+            if (!isValidCRUDRequest(request)) {
+                String notAllowedResponse = Html.build(OPERATION_NOT_ALLOWED_ERROR);
+                response.status(HttpHeader.NOT_ALLOWED).send(notAllowedResponse);
+                return;
+            }
+
+            // Get Handler for specified path
+            Handler handler = getHandler(request.getPath());
+
+            // Handle PATH NOT FOUND
+            if (handler == null) {
+                String pathNotFoundResponse = Html.build(PATH_NOT_FOUND_ERROR);
+                response.status(HttpHeader.NOT_FOUND).send(pathNotFoundResponse);
+                return;
+            }
+
+            // Execute handler callback in thread
+            getCallback(request.getOperation(), handler).handle(request, response);
+
+        } catch (IllegalAccessException | IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private Request getRequest(BufferedReader instream) throws IOException, IllegalAccessException {
+        // Get request line
+        StringBuilder headers = new StringBuilder();
+        String requestLine = instream.readLine();
+
+        // Get headers
+        String line = instream.readLine();
+        while (line != null && !line.trim().isEmpty()) {
+            headers.append(line).append("\n");
+            line = instream.readLine();
+        }
+
+        // Get body
+        StringBuilder body = new StringBuilder();
+        while (instream.ready()) {
+            body.append((char) instream.read());
+        }
+
+        // Parse Request
+        return RequestParser.get(requestLine, headers.toString(), body.toString());
+    }
+
+    private HttpLambdaHandler getCallback(CRUD operation, Handler handler) {
         if (operation.equals(CRUD.GET)) return handler.getGETCallback();
         if (operation.equals(CRUD.POST)) return handler.getPOSTCallback();
         return null;
@@ -96,21 +163,4 @@ public class Server {
         CRUD operation = request.getOperation();
         return operation.equals(CRUD.GET) || operation.equals(CRUD.POST);
     }
-
-    // idea to implement middleware
-    // currently not required, but could be interesting
-    //    public void use(Runnable middleware) {
-    //
-    //    }
-
-    // to add routes directly to server
-    // would have to handle conflicts with router
-    // currently not required
-    //    public void use(CRUD operation, String path, Runnable callback){ try {
-    //            router.createHandler(operation, path, callback);
-    //        } catch(IllegalAccessException e){
-    //            e.printStackTrace();
-    //        }
-    //    }
-
 }

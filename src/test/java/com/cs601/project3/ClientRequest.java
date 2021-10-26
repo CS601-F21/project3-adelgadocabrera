@@ -3,36 +3,83 @@ package com.cs601.project3;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 public class ClientRequest {
-    public static String fetch(String target) throws IOException {
+    public static ClientResponse get(String href) throws IOException {
+        HttpURLConnection con = connect("GET", href);
+        con.connect();
+        return response(con);
+    }
+
+    public static ClientResponse post(String href, String data) throws IOException {
+        HttpURLConnection con = connect("POST", href);
+        con.setRequestProperty("Content-Type", "text/plain");
+        con.setDoOutput(true);
+        try (OutputStream os = con.getOutputStream()) {
+            byte[] input = data.getBytes(StandardCharsets.UTF_8);
+            os.write(input, 0, input.length);
+        }
+        con.connect();
+        return response(con);
+    }
+
+    public static ClientResponse put(String href, String data) throws IOException {
+        HttpURLConnection con = connect("PUT", href);
+        con.setDoOutput(true);
+        con.connect();
+        return response(con);
+    }
+
+    private static HttpURLConnection connect(String operation, String href) throws IOException {
         //create URL object
-        URL url = new URL(target);
+        URL url = new URL(href);
 
         //create secure connection
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
-        //set HTTP method
-        con.setRequestMethod("GET");
+        // close connection upon finishing request
+        con.setRequestProperty("Connection", "close");
 
-        con.connect();
+        // set HTTP method
+        con.setRequestMethod(operation);
+
+        return con;
+    }
+
+    private static ClientResponse response(HttpURLConnection con) throws IOException {
+        // prepare request response
         int responseCode = con.getResponseCode();
-        if (responseCode == HttpURLConnection.HTTP_OK) { // success
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        final StringBuilder response = new StringBuilder();
+
+        if ((con.getResponseCode() < 200) || (con.getResponseCode() >= 300)) {
+            final BufferedReader in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
             String inputLine;
-            StringBuffer response = new StringBuffer();
 
             while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
+                response.append(inputLine).append("\n");
             }
             in.close();
 
-            // print result
-            return (response.toString());
-        } else {
-            return ("GET request not worked");
+            return new ClientResponse(responseCode, response.toString());
         }
+
+        if (responseCode == HttpURLConnection.HTTP_OK) { // success
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine).append("\n");
+            }
+            in.close();
+
+            return new ClientResponse(responseCode, response.toString());
+        }
+
+        String body = "Client request didn't get a response";
+        return new ClientResponse(responseCode, body);
     }
 }
