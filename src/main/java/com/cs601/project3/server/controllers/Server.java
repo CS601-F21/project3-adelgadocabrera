@@ -94,14 +94,14 @@ public class Server implements Runnable {
 
     private void serverLogic(Socket sock) {
         try (
-                BufferedReader instream = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-                OutputStream outputStream = sock.getOutputStream()
+                BufferedReader inStream = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+                OutputStream outStream = sock.getOutputStream()
         ) {
             // Create Request && Response objects
-            Response response = new Response(outputStream);
+            Response response = new Response(outStream);
             Request request;
             try {
-                request = getRequest(instream);
+                request = getRequest(inStream);
             } catch (IllegalAccessException e) {
                 String body = Html.build(HttpHeader.BAD_REQUEST);
                 response.status(HttpHeader.BAD_REQUEST).send(body);
