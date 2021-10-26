@@ -5,6 +5,7 @@ public class HttpHeader {
     public static final String VERSION = "HTTP/1.1";
 
     public static final String OK = headerify("200 OK");
+    public static final String BAD_REQUEST = headerify("400 Bad Request");
     public static final String NOT_FOUND = headerify("404 Not Found");
     public static final String NOT_ALLOWED = headerify("405 Method Not Allowed");
 

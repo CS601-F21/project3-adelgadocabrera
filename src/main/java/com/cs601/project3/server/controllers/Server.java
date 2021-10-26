@@ -98,8 +98,15 @@ public class Server implements Runnable {
                 OutputStream outputStream = sock.getOutputStream()
         ) {
             // Create Request && Response objects
-            Request request = getRequest(instream);
             Response response = new Response(outputStream);
+            Request request;
+            try {
+                request = getRequest(instream);
+            } catch (IllegalAccessException e) {
+                String body = Html.build(HttpHeader.BAD_REQUEST);
+                response.status(HttpHeader.BAD_REQUEST).send(body);
+                return;
+            }
 
             // Only accept GET/POST
             if (!isValidCRUDRequest(request)) {
@@ -127,7 +134,7 @@ public class Server implements Runnable {
                 response.status(HttpHeader.NOT_FOUND).send(pathNotFoundResponse);
             }
 
-        } catch (IllegalAccessException | IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
