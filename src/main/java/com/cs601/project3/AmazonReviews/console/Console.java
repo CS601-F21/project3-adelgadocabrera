@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class Console {
     private final UserQueries Query;
-    private final ArrayList<String> possibleOptions = new ArrayList<>();
+    private final ArrayList<String> options = new ArrayList<>();
     private final String FIND_SELECT = "find";
     private final String REVIEW_SEARCH_SELECT = "reviewsearch";
     private final String QA_SEARCH_SELECT = "qasearch";
@@ -29,13 +29,13 @@ public class Console {
     private Console(ReviewsFinder reviews, QAsFinder qas) {
         this.Query = new UserQueries(reviews, qas);
 
-        possibleOptions.add(FIND_SELECT);
-        possibleOptions.add(REVIEW_SEARCH_SELECT);
-        possibleOptions.add(QA_SEARCH_SELECT);
-        possibleOptions.add(REVIEW_PARTIAL_SEARCH_SELECT);
-        possibleOptions.add(QA_PARTIAL_SEARCH_SELECT);
-        possibleOptions.add(EXIT_INT);
-        possibleOptions.add(EXIT_STRING);
+        options.add(FIND_SELECT);
+        options.add(REVIEW_SEARCH_SELECT);
+        options.add(QA_SEARCH_SELECT);
+        options.add(REVIEW_PARTIAL_SEARCH_SELECT);
+        options.add(QA_PARTIAL_SEARCH_SELECT);
+        options.add(EXIT_INT);
+        options.add(EXIT_STRING);
     }
 
     /**
