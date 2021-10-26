@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author Alberto Delgado
  * <p>
- * Server is runnable but not necessarily has to ran in separate thread.
- * It is made runnable to it CAN be ran in separate thread.
+ * Server is runnable but not necessarily has to run in separate thread.
+ * It is made runnable, so it CAN be run in separate thread.
  */
 public class Server implements Runnable {
     // server properties

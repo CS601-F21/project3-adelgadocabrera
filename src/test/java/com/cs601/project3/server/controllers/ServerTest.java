@@ -51,7 +51,7 @@ class ServerTest {
     }
 
     @Test
-    @DisplayName("Should return method not found when performing a non GET/POST request")
+    @DisplayName("Should return METHOD NOT ALLOWED when performing a non GET/POST request")
     void notAllowed() throws InterruptedException {
         clientThread = new Thread(() -> {
             try {
@@ -66,7 +66,7 @@ class ServerTest {
     }
 
     @Test
-    @DisplayName("Should return method not found when performing a non GET/POST request")
+    @DisplayName("Should return METHOD NOT FOUND when performing a request with no defined handler")
     void notFound() throws InterruptedException {
         clientThread = new Thread(() -> {
             try {
