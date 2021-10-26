@@ -31,6 +31,16 @@ class RequestParserTest {
     }
 
     @Test
+    @DisplayName("should return BAD REQUEST because of incorrect protocol")
+    void incorrectProtocolResponse() {
+        try {
+            RequestParser.get(HTTP_HEADLINE_INCORRECT, "", "");
+        } catch (IllegalAccessException e) {
+            Assertions.assertEquals(e.getMessage(), HttpHeader.BAD_REQUEST);
+        }
+    }
+
+    @Test
     @DisplayName("should throw because null arguments")
     void nullArguments() {
         Assertions.assertThrows(NullPointerException.class, () ->
@@ -42,5 +52,25 @@ class RequestParserTest {
     void headline() {
         Assertions.assertThrows(IllegalAccessException.class,
                 () -> RequestParser.get("GET /", "", ""));
+    }
+
+    @Test
+    @DisplayName("should throw BAD REQUEST because bad formation of request headline")
+    void headlineMessage() {
+        try {
+            RequestParser.get("GET /", "", "");
+        } catch (IllegalAccessException e) {
+            Assertions.assertEquals(e.getMessage(), HttpHeader.BAD_REQUEST);
+        }
+    }
+
+    @Test
+    @DisplayName("should throw NOT ALLOWED becuase unsupportd CRUD operation")
+    void crudOperationError() {
+        try {
+            RequestParser.get("PUT / HTTP/1.1", "", "");
+        } catch (IllegalAccessException e) {
+            Assertions.assertEquals(e.getMessage(), HttpHeader.NOT_ALLOWED);
+        }
     }
 }
