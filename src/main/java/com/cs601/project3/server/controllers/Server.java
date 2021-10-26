@@ -103,8 +103,8 @@ public class Server implements Runnable {
             try {
                 request = getRequest(inStream);
             } catch (IllegalAccessException e) {
-                String body = Html.build(e.getMessage());
-                response.status(e.getMessage()).send(body);
+                String errorResponse = Html.build(e.getMessage());
+                response.status(e.getMessage()).send(errorResponse);
                 return;
             }
 
