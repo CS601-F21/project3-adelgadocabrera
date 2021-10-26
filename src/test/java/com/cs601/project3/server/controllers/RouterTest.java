@@ -49,13 +49,13 @@ class RouterTest {
     @Test
     @DisplayName("should not throw error when adding lambdad handler")
     void addHttpHandler() {
-        Assertions.assertDoesNotThrow(() -> app.get("/", (req, res) -> UserApi.updateUser.handle(req, res)));
+        Assertions.assertDoesNotThrow(() -> app.get(PATH, (req, res) -> UserApi.updateUser.handle(req, res)));
     }
 
     @Test
     @DisplayName("should not throw error when adding handler")
     void addHttpClassHandler() {
-        Assertions.assertDoesNotThrow(() -> app.get("/", UserApi.getUser));
+        Assertions.assertDoesNotThrow(() -> app.get(PATH, UserApi.getUser));
     }
 
     @Test

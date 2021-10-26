@@ -119,7 +119,13 @@ public class Server implements Runnable {
             }
 
             // Execute handler callback in thread
-            getCallback(request.getOperation(), handler).handle(request, response);
+            HttpLambdaHandler callback = getCallback(request.getOperation(), handler);
+            if (callback != null) {
+                callback.handle(request, response);
+            } else {
+                String pathNotFoundResponse = Html.build(PATH_NOT_FOUND_ERROR);
+                response.status(HttpHeader.NOT_FOUND).send(pathNotFoundResponse);
+            }
 
         } catch (IllegalAccessException | IOException e) {
             e.printStackTrace();

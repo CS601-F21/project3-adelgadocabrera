@@ -80,6 +80,22 @@ class ServerTest {
         execute();
     }
 
+    @Test
+    @DisplayName("Should return METHOD NOT FOUND when performing request to path that exists but bad operation")
+    void nullHandler() {
+        app.get(PATH, TestExample.get);
+        clientThread = new Thread(() -> {
+            try {
+                ClientResponse response = ClientRequest.post(URL, "");
+                Assertions.assertEquals(404, response.statusCode);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        execute();
+    }
+
 
     @Test
     @DisplayName("Should create GET handler and update outputExample value")
