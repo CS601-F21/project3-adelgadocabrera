@@ -27,8 +27,8 @@ public class Server implements Runnable {
 
     // threads
     private final int THREAD_POOL_TIMEOUT = 30; // in seconds
-    private final int THREAD_SIZE = 10;
-    private final ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_SIZE);
+    private final int THREAD_POOL_SIZE = 10;
+    private final ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 
     public Server(int port) {
         try {
