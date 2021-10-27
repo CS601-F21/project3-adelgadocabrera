@@ -26,7 +26,7 @@ public class Server implements Runnable {
     private Router router = new Router();
 
     // threads
-    private final int THREAD_POOL_TIMEOUT = 30; // in seconds
+    private final int THREAD_POOL_TIMEOUT = 10; // in seconds
     private final ExecutorService threadPool = Executors.newFixedThreadPool(10);
 
     public Server(int port) {
