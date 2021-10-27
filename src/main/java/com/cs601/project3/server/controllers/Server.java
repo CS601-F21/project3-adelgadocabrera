@@ -138,22 +138,22 @@ public class Server implements Runnable {
 
     }
 
-    private Request getRequest(BufferedReader instream) throws IOException, IllegalAccessException {
+    private Request getRequest(BufferedReader inStream) throws IOException, IllegalAccessException {
         // Get request line
         StringBuilder headers = new StringBuilder();
-        String requestLine = instream.readLine();
+        String requestLine = inStream.readLine();
 
         // Get headers
-        String line = instream.readLine();
+        String line = inStream.readLine();
         while (line != null && !line.trim().isEmpty()) {
             headers.append(line).append("\n");
-            line = instream.readLine();
+            line = inStream.readLine();
         }
 
         // Get body
         StringBuilder body = new StringBuilder();
-        while (instream.ready()) {
-            body.append((char) instream.read());
+        while (inStream.ready()) {
+            body.append((char) inStream.read());
         }
 
         // Parse Request
