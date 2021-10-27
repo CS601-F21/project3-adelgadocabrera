@@ -10,7 +10,6 @@ class Delete {
             System.out.println("helloWorld!\n");
         });
 
-
         // logic extracted to method
         server.get("/user/create", (req, res) -> CreateUser.handle(req, res));
         server.get("/user/create/alternative", CreateUser::handle);
@@ -22,7 +21,6 @@ class Delete {
 
     // server
     public static class Server {
-
         // create "GET" endpoint
         public void get(String path, HttpLambdaHandler handler) {
             System.out.println("\nServer new path: " + path);

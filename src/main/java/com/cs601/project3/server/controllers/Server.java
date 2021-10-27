@@ -29,10 +29,6 @@ public class Server implements Runnable {
     private final int THREAD_POOL_TIMEOUT = 30; // in seconds
     private final ExecutorService threadPool = Executors.newFixedThreadPool(10);
 
-    // error messages
-    final String OPERATION_NOT_ALLOWED_ERROR = "Only GET and POST operations are allowed";
-    final String PATH_NOT_FOUND_ERROR = "<h3>Path does not exist.</h3>";
-
     public Server(int port) {
         try {
             server = new ServerSocket(port);
@@ -110,7 +106,7 @@ public class Server implements Runnable {
 
             // Only accept GET/POST
             if (!isValidCRUDRequest(request)) {
-                String notAllowedResponse = Html.build(OPERATION_NOT_ALLOWED_ERROR);
+                String notAllowedResponse = Html.build(HttpHeader.NOT_ALLOWED);
                 response.status(HttpHeader.NOT_ALLOWED).send(notAllowedResponse);
                 return;
             }
@@ -118,9 +114,9 @@ public class Server implements Runnable {
             // Get Handler for specified path
             Handler handler = getHandler(request.getPath());
 
-            // Handle PATH NOT FOUND
+            // No path exists
             if (handler == null) {
-                String pathNotFoundResponse = Html.build(PATH_NOT_FOUND_ERROR);
+                String pathNotFoundResponse = Html.build(HttpHeader.NOT_FOUND);
                 response.status(HttpHeader.NOT_FOUND).send(pathNotFoundResponse);
                 return;
             }
@@ -130,7 +126,8 @@ public class Server implements Runnable {
             if (callback != null) {
                 callback.handle(request, response);
             } else {
-                String pathNotFoundResponse = Html.build(PATH_NOT_FOUND_ERROR);
+                // The path exists but there is no callback defined for that endpoint
+                String pathNotFoundResponse = Html.build(HttpHeader.NOT_FOUND);
                 response.status(HttpHeader.NOT_FOUND).send(pathNotFoundResponse);
             }
 
