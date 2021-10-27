@@ -1,4 +1,4 @@
-package com.cs601.project3.AmazonReviews.models;
+package com.cs601.project3.amazon.models;
 
 import java.util.*;
 

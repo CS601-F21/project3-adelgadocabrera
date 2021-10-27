@@ -1,9 +1,9 @@
-package com.cs601.project3.AmazonReviews;
+package com.cs601.project3.amazon;
 
-import com.cs601.project3.AmazonReviews.controllers.ArgsParser;
-import com.cs601.project3.AmazonReviews.controllers.QAsFinder;
-import com.cs601.project3.AmazonReviews.controllers.ReviewsFinder;
-import com.cs601.project3.AmazonReviews.models.ArgsParserResponse;
+import com.cs601.project3.amazon.controllers.ArgsParser;
+import com.cs601.project3.amazon.controllers.QAsFinder;
+import com.cs601.project3.amazon.controllers.ReviewsFinder;
+import com.cs601.project3.amazon.models.ArgsParserResponse;
 
 /**
  * Author: Alberto Delgado

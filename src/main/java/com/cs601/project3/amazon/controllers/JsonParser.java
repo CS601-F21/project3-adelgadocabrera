@@ -1,7 +1,7 @@
-package com.cs601.project3.AmazonReviews.controllers;
+package com.cs601.project3.amazon.controllers;
 
-import com.cs601.project3.AmazonReviews.models.Doc;
-import com.cs601.project3.AmazonReviews.models.JsonParserResponse;
+import com.cs601.project3.amazon.models.Doc;
+import com.cs601.project3.amazon.models.JsonParserResponse;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;

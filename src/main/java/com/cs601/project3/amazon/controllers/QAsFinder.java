@@ -1,8 +1,8 @@
-package com.cs601.project3.AmazonReviews.controllers;
+package com.cs601.project3.amazon.controllers;
 
-import com.cs601.project3.AmazonReviews.models.InvertedIndex;
-import com.cs601.project3.AmazonReviews.models.JsonParserResponse;
-import com.cs601.project3.AmazonReviews.models.QA;
+import com.cs601.project3.amazon.models.InvertedIndex;
+import com.cs601.project3.amazon.models.JsonParserResponse;
+import com.cs601.project3.amazon.models.QA;
 
 import java.util.ArrayList;
 
