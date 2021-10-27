@@ -107,8 +107,8 @@ public class Server implements Runnable {
 
             // Only accept GET/POST
             if (!isValidCRUDRequest(request)) {
-                String notAllowedResponse = Html.build(HttpHeader.NOT_ALLOWED);
-                response.status(HttpHeader.NOT_ALLOWED).send(notAllowedResponse);
+                String notAllowedResponse = Html.build(HttpStatus.NOT_ALLOWED);
+                response.status(HttpStatus.NOT_ALLOWED).send(notAllowedResponse);
                 return;
             }
 
@@ -117,8 +117,8 @@ public class Server implements Runnable {
 
             // No path exists
             if (handler == null) {
-                String pathNotFoundResponse = Html.build(HttpHeader.NOT_FOUND);
-                response.status(HttpHeader.NOT_FOUND).send(pathNotFoundResponse);
+                String pathNotFoundResponse = Html.build(HttpStatus.NOT_FOUND);
+                response.status(HttpStatus.NOT_FOUND).send(pathNotFoundResponse);
                 return;
             }
 
@@ -128,8 +128,8 @@ public class Server implements Runnable {
                 callback.handle(request, response);
             } else {
                 // The path exists but there is no callback defined for that endpoint
-                String pathNotFoundResponse = Html.build(HttpHeader.NOT_FOUND);
-                response.status(HttpHeader.NOT_FOUND).send(pathNotFoundResponse);
+                String pathNotFoundResponse = Html.build(HttpStatus.NOT_FOUND);
+                response.status(HttpStatus.NOT_FOUND).send(pathNotFoundResponse);
             }
 
         } catch (IOException e) {

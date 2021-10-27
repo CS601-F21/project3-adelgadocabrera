@@ -75,7 +75,7 @@ class RouterTest {
             handlerOutput = HANDLER_OUTPUT;
 
             try {
-                res.status(HttpHeader.OK).send(RESPONSE);
+                res.status(HttpStatus.OK).send(RESPONSE);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -102,7 +102,7 @@ class RouterTest {
             handlerOutput = HANDLER_OUTPUT;
 
             try {
-                res.status(HttpHeader.OK).send(RESPONSE);
+                res.status(HttpStatus.OK).send(RESPONSE);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -160,7 +160,7 @@ class RouterTest {
         public void handle(Request req, Response res) {
             handlerOutput = HANDLER_OUTPUT;
             try {
-                res.status(HttpHeader.OK).send(RESPONSE);
+                res.status(HttpStatus.OK).send(RESPONSE);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -174,7 +174,7 @@ class RouterTest {
         public void handle(Request req, Response res) {
             handlerOutput = HANDLER_OUTPUT;
             try {
-                res.status(HttpHeader.OK).send(RESPONSE);
+                res.status(HttpStatus.OK).send(RESPONSE);
             } catch (IOException e) {
                 e.printStackTrace();
             }

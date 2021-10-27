@@ -1,7 +1,7 @@
 package com.cs601.project3.server.controllers;
 
 import com.cs601.project3.server.models.CRUD;
-import com.cs601.project3.server.models.HttpHeader;
+import com.cs601.project3.server.models.HttpStatus;
 import com.cs601.project3.server.models.Request;
 
 public class RequestParser {
@@ -12,7 +12,7 @@ public class RequestParser {
         String[] requestLineParts = request.split("\\s+");
 
         if (requestLineParts.length != REQUEST_LINE_LENGTH) {
-            throw new IllegalAccessException(HttpHeader.BAD_REQUEST);
+            throw new IllegalAccessException(HttpStatus.BAD_REQUEST);
         }
 
         // request headline consists of 3 parts: operation, path and protocol
@@ -22,11 +22,11 @@ public class RequestParser {
 
         boolean operationExists = isInEnum(requestLineParts[0], CRUD.class);
         if (!operationExists) {
-            throw new IllegalAccessException(HttpHeader.NOT_ALLOWED);
+            throw new IllegalAccessException(HttpStatus.NOT_ALLOWED);
         }
 
-        if (!protocol.equals(HttpHeader.VERSION)) {
-            throw new IllegalAccessException(HttpHeader.BAD_REQUEST);
+        if (!protocol.equals(HttpStatus.VERSION)) {
+            throw new IllegalAccessException(HttpStatus.BAD_REQUEST);
         }
 
         return new Request(operation, path, protocol, headers, body);

@@ -3,7 +3,7 @@ package com.cs601.project3.server.controllers;
 import com.cs601.project3.ClientRequest;
 import com.cs601.project3.ClientResponse;
 import com.cs601.project3.server.models.HttpHandler;
-import com.cs601.project3.server.models.HttpHeader;
+import com.cs601.project3.server.models.HttpStatus;
 import com.cs601.project3.server.models.Request;
 import com.cs601.project3.server.models.Response;
 import com.cs601.project3.server.views.Html;
@@ -199,7 +199,7 @@ class ServerTest {
 
             try {
                 String body = "Your POST has been received!";
-                res.status(HttpHeader.OK).send(Html.build(body));
+                res.status(HttpStatus.OK).send(Html.build(body));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -214,7 +214,7 @@ class ServerTest {
             outputExample = GET_OUTPUT;
             try {
                 String body = "Your GET has been received!";
-                res.status(HttpHeader.OK).send(Html.build(body));
+                res.status(HttpStatus.OK).send(Html.build(body));
             } catch (IOException e) {
                 e.printStackTrace();
             }

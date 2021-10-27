@@ -1,6 +1,6 @@
 package com.cs601.project3.server.models;
 
-public class HttpHeader {
+public class HttpStatus {
     // protocol version
     private static final String LINE_END = "\n\r\n";
     public static final String VERSION = "HTTP/1.1";

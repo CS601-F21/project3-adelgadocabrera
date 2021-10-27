@@ -1,6 +1,6 @@
 package com.cs601.project3.server.controllers;
 
-import com.cs601.project3.server.models.HttpHeader;
+import com.cs601.project3.server.models.HttpStatus;
 import com.cs601.project3.server.models.Request;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +20,7 @@ class RequestParserTest {
     @DisplayName("Should have correct http protocol")
     void correctProtocol() throws IllegalAccessException {
         Request request = RequestParser.get(HTTP_HEADLINE_CORRECT, "", "");
-        Assertions.assertEquals(HttpHeader.VERSION, request.getProtocol());
+        Assertions.assertEquals(HttpStatus.VERSION, request.getProtocol());
     }
 
     @Test
@@ -36,7 +36,7 @@ class RequestParserTest {
         try {
             RequestParser.get(HTTP_HEADLINE_INCORRECT, "", "");
         } catch (IllegalAccessException e) {
-            Assertions.assertEquals(e.getMessage(), HttpHeader.BAD_REQUEST);
+            Assertions.assertEquals(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -60,7 +60,7 @@ class RequestParserTest {
         try {
             RequestParser.get("GET /", "", "");
         } catch (IllegalAccessException e) {
-            Assertions.assertEquals(e.getMessage(), HttpHeader.BAD_REQUEST);
+            Assertions.assertEquals(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -70,7 +70,7 @@ class RequestParserTest {
         try {
             RequestParser.get("PUT / HTTP/1.1", "", "");
         } catch (IllegalAccessException e) {
-            Assertions.assertEquals(e.getMessage(), HttpHeader.NOT_ALLOWED);
+            Assertions.assertEquals(e.getMessage(), HttpStatus.NOT_ALLOWED);
         }
     }
 }
