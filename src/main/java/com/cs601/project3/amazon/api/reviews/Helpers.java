@@ -11,7 +11,7 @@ public class Helpers {
     public static boolean payloadHasQuery(String payload, String queryFlag) {
         if (payload == null) return false;
         if (payload.equals("")) return false;
-        if (payload.contains("=")) return true;
+        if (!payload.contains("=")) return false;
         String[] payloadParts = payload.trim().split("=");
         if (payloadParts.length < 1 || !payloadParts[0].equals(queryFlag)) {
             return false;
