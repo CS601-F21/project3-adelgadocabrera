@@ -123,7 +123,7 @@ public class Server implements Runnable {
             }
 
             // Execute handler callback in thread
-            HttpLambdaHandler callback = getHandlerCallback(request.getOperation(), handler);
+            HttpLambdaHandler callback = getCallback(request.getOperation(), handler);
             if (callback != null) {
                 callback.handle(request, response);
             } else {
@@ -160,7 +160,7 @@ public class Server implements Runnable {
         return RequestParser.get(requestLine, headers.toString(), body.toString());
     }
 
-    private HttpLambdaHandler getHandlerCallback(CRUD operation, Handler handler) {
+    private HttpLambdaHandler getCallback(CRUD operation, Handler handler) {
         if (operation.equals(CRUD.GET)) return handler.getGETCallback();
         if (operation.equals(CRUD.POST)) return handler.getPOSTCallback();
         return null;

@@ -1,9 +1,11 @@
 package com.cs601.project3.amazon;
 
+import com.cs601.project3.amazon.apis.Reviews;
 import com.cs601.project3.amazon.controllers.ArgsParser;
 import com.cs601.project3.amazon.controllers.QAsFinder;
 import com.cs601.project3.amazon.controllers.ReviewsFinder;
 import com.cs601.project3.amazon.models.ArgsParserResponse;
+import com.cs601.project3.server.controllers.Server;
 
 /**
  * Author: Alberto Delgado
@@ -17,11 +19,25 @@ import com.cs601.project3.amazon.models.ArgsParserResponse;
  * the previously mentioned datasets.
  */
 public class AmazonSearch {
+    public static ReviewsFinder reviews;
+    public static QAsFinder qas;
+    private static Server app;
 
     public static void main(String[] args) {
+        initInvertedIndex(args);
+        initServer();
+        app.run();
     }
 
-    private void initInvertedIndex(String[] args) {
+    private static void initServer() {
+        app = new Server(8080);
+        app.get("/reviewsearch", Reviews.getForm);
+        app.post("/reviewsearch", Reviews.search);
+//        app.get("/find");
+//        app.post("/find");
+    }
+
+    private static void initInvertedIndex(String[] args) {
         ArgsParserResponse fileNames = ArgsParser.get(args);
 
         if (fileNames.hasErrors()) {
@@ -29,8 +45,6 @@ public class AmazonSearch {
             System.exit(1);
         }
 
-        ReviewsFinder reviews;
-        QAsFinder qas;
         String reviewsFile = fileNames.getReviews();
         String qasFile = fileNames.getQAs();
 

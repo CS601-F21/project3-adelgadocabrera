@@ -8,6 +8,7 @@ import java.util.ArrayList;
  * Data structured for scanned Reviews
  */
 public class Review extends Doc {
+    public static final String EOP = "END_OF_PROPERTY";
     private final String reviewerID;
     private final String asin;
     private final String reviewerName;
@@ -17,7 +18,6 @@ public class Review extends Doc {
     private final String summary;
     private final int unixReviewTime;
     private final String reviewTime;
-
 
     public Review(
             String reviewerID,
@@ -40,6 +40,44 @@ public class Review extends Doc {
         this.reviewTime = reviewTime;
     }
 
+    public Review(
+            String reviewerName,
+            int overall,
+            String summary,
+            String reviewText,
+            String reviewTime
+    ) {
+        this.reviewerName = reviewerName;
+        this.overall = overall;
+        this.summary = summary;
+        this.reviewText = reviewText;
+        this.reviewTime = reviewTime;
+        this.reviewerID = null;
+        this.asin = null;
+        this.helpful = null;
+        this.unixReviewTime = -1;
+    }
+
+    // get reviewer name
+    public String getReviewerName() {
+        return reviewerName;
+    }
+
+    // get overall
+    public int getOverall() {
+        return overall;
+    }
+
+    // get summary
+    public String getSummary() {
+        return summary;
+    }
+
+    // get date
+    public String getReviewTime() {
+        return reviewTime;
+    }
+
     // asin getter
     public String getAsin() {
         return asin;
@@ -53,16 +91,11 @@ public class Review extends Doc {
     // toString() method overriding
     @Override
     public String toString() {
-        return "Review{" +
-                "reviewerID='" + reviewerID + '\'' +
-                ", asin='" + asin + '\'' +
-                ", reviewerName='" + reviewerName + '\'' +
-                ", helpful=" + helpful +
-                ", reviewText='" + reviewText + '\'' +
-                ", overall=" + overall +
-                ", summary='" + summary + '\'' +
-                ", unixReviewTime=" + unixReviewTime +
-                ", reviewTime='" + reviewTime + '\'' +
-                '}';
+        return "reviewerName=" + reviewerName + EOP +
+                "overall=" + overall + EOP +
+                "summary=" + summary + EOP +
+                "reviewText=" + reviewText + EOP +
+                "reviewTime=" + reviewTime + EOP
+                ;
     }
 }
