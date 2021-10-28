@@ -1,6 +1,6 @@
 package com.cs601.project3.amazon;
 
-import com.cs601.project3.amazon.apis.Reviews;
+import com.cs601.project3.amazon.api.Reviews;
 import com.cs601.project3.amazon.controllers.ArgsParser;
 import com.cs601.project3.amazon.controllers.QAsFinder;
 import com.cs601.project3.amazon.controllers.ReviewsFinder;
@@ -31,10 +31,10 @@ public class AmazonSearch {
 
     private static void initServer() {
         app = new Server(8080);
-        app.get("/reviewsearch", Reviews.getForm);
-        app.post("/reviewsearch", Reviews.search);
-//        app.get("/find");
-//        app.post("/find");
+        app.get("/reviewsearch", Reviews.searchBarReviewTerm);
+        app.post("/reviewsearch", Reviews.searchReviews);
+        app.get("/find", Reviews.searchBarAsin);
+        app.post("/find", Reviews.find);
     }
 
     private static void initInvertedIndex(String[] args) {

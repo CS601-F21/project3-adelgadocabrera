@@ -1,4 +1,4 @@
-package com.cs601.project3.amazon.apis.reviews;
+package com.cs601.project3.amazon.api.reviews.views;
 
 public class Styles {
     public static String css = """

@@ -6,6 +6,7 @@ package com.cs601.project3.amazon.models;
  * Data structure for scanned QAs
  */
 public class QA extends Doc {
+    public static final String EOP = "END_OF_PROPERTY";
     private final String questionType;
     private final String asin;
     private final String answerTime;
@@ -31,6 +32,27 @@ public class QA extends Doc {
         this.answer = answer;
     }
 
+    /**
+     * Created to send back on client request
+     *
+     * @param answerTime
+     * @param question
+     * @param answer
+     */
+    public QA(
+            String question,
+            String answer,
+            String answerTime
+    ) {
+        this.answerTime = answerTime;
+        this.answer = answer;
+        this.question = question;
+        this.answerType = null;
+        this.questionType = null;
+        this.asin = null;
+        this.unixTime = -1;
+    }
+
     // asin getter
     public String getAsin() {
         return asin;
@@ -46,17 +68,16 @@ public class QA extends Doc {
         return answer;
     }
 
+    // get answer time
+    public String getAnswerTime() {
+        return answerTime;
+    }
+
     // toString() method overriding
     @Override
     public String toString() {
-        return "QA{" +
-                "questionType='" + questionType + '\'' +
-                ", asin='" + asin + '\'' +
-                ", answerTime='" + answerTime + '\'' +
-                ", unixTime=" + unixTime +
-                ", question='" + question + '\'' +
-                ", answerType='" + answerType + '\'' +
-                ", answer='" + answer + '\'' +
-                '}';
+        return "question=" + question + EOP +
+                "answer=" + answer + EOP +
+                "answerTime=" + answerTime + EOP;
     }
 }
