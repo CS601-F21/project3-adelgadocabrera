@@ -10,7 +10,8 @@ import com.cs601.project3.server.models.Response;
 import java.io.IOException;
 import java.util.List;
 
-import static com.cs601.project3.amazon.api.Reviews.sendBadRequest;
+import static com.cs601.project3.amazon.api.reviews.Helpers.payloadHasQuery;
+import static com.cs601.project3.amazon.api.reviews.Helpers.sendBadRequest;
 
 public class Find extends HttpHandler {
     public void handle(Request req, Response res) {
@@ -18,7 +19,7 @@ public class Find extends HttpHandler {
         String[] payloadParts = payload.trim().split("=");
         String ASIN_FLAG = "asin";
 
-        if (payloadParts.length < 1 || !payloadParts[0].equals(ASIN_FLAG)) {
+        if (!payloadHasQuery(payload, ASIN_FLAG)) {
             sendBadRequest(res);
             return;
         }
