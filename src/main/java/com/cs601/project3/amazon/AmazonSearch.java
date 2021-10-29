@@ -28,6 +28,8 @@ public class AmazonSearch {
     public static void main(String[] args) {
         initInvertedIndex(args);
         initServer();
+
+        System.out.println("Server running!");
         app.run();
     }
 

@@ -18,15 +18,23 @@ public class ReviewsQAsParser {
             String answerTime = "";
 
             for (String line : lines) {
-                String[] property = line.split("=");
-                String label = property[0];
-                String value = property[1];
-                if (label.equals("question")) question = value;
-                if (label.equals("answer")) answer = value;
-                if (label.equals("answerTime")) answerTime = value;
+                try {
+                    String[] property = line.split("=");
+                    String label = property[0];
+                    String value = property[1];
+                    if (label.equals("question")) question = value;
+                    if (label.equals("answer")) answer = value;
+                    if (label.equals("answerTime")) answerTime = value;
+                } catch (Exception e) {
+                    // catch if label or value doesn't exits due to incomplete json file
+                }
             }
 
-            reviews.add(new QA(question, answer, answerTime));
+            if (!question.isEmpty() &&
+                    !answer.isEmpty() &&
+                    !answerTime.isEmpty()) {
+                reviews.add(new QA(question, answer, answerTime));
+            }
         }
         return reviews;
     }
@@ -44,17 +52,27 @@ public class ReviewsQAsParser {
             String reviewTime = "";
 
             for (String line : lines) {
-                String[] property = line.split("=");
-                String label = property[0];
-                String value = property[1];
-                if (label.equals("reviewerName")) reviewerName = value;
-                if (label.equals("overall")) overall = Integer.parseInt(value);
-                if (label.equals("summary")) summary = value;
-                if (label.equals("reviewText")) reviewText = value;
-                if (label.equals("reviewTime")) reviewTime = value;
+                try {
+                    String[] property = line.split("=");
+                    String label = property[0];
+                    String value = property[1];
+                    if (label.equals("reviewerName")) reviewerName = value;
+                    if (label.equals("overall")) overall = Integer.parseInt(value);
+                    if (label.equals("summary")) summary = value;
+                    if (label.equals("reviewText")) reviewText = value;
+                    if (label.equals("reviewTime")) reviewTime = value;
+                } catch (Exception e) {
+                    // catch if it does not exist label or value due to incomplete json file
+                }
             }
 
-            reviews.add(new Review(reviewerName, overall, summary, reviewText, reviewTime));
+            if (!reviewerName.isEmpty() &&
+                    overall != 0 &&
+                    !summary.isEmpty() &&
+                    !reviewText.isEmpty() &&
+                    !reviewTime.isEmpty()) {
+                reviews.add(new Review(reviewerName, overall, summary, reviewText, reviewTime));
+            }
         }
         return reviews;
     }
