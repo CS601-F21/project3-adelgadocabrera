@@ -34,15 +34,15 @@ public class AmazonSearch {
         app = new Server(PORT);
 
         // reviewsearch endpoints
-        app.get("/reviewsearch", Reviews.searchBarReviewTerm);
+        app.get("/reviewsearch", Reviews.searchBarReviewSearch);
         app.post("/reviewsearch", Reviews.reviewSearch);
 
         // find endpoints
-        app.get("/find", Reviews.searchBarAsin);
-        app.post("/find", Reviews.find);
+        app.get("/find", Reviews.searchBarFindAsin);
+        app.post("/find", Reviews.findAsin);
     }
 
-    private static void initInvertedIndex(String[] args) {
+    public static void initInvertedIndex(String[] args) {
         ArgsParserResponse fileNames = ArgsParser.get(args);
 
         if (fileNames.hasErrors()) {

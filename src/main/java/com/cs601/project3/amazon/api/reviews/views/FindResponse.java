@@ -21,7 +21,7 @@ public class FindResponse {
             """;
     private static final String hero = """
             <div class="container">
-                    <h1>Amazon Reviews & QA</h1>
+                    <h1>Amazon Reviews and QA</h1>
                     """ + form + """
             </div> 
             """;
