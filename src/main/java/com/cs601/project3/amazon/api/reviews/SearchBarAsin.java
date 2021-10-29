@@ -8,7 +8,7 @@ import com.cs601.project3.server.models.Response;
 
 import java.io.IOException;
 
-public class SearchBarAsin extends HttpHandler {
+public class SearchBarAsin implements HttpHandler {
     public void handle(Request req, Response res) {
         String body = FindResponse.hero();
         try {

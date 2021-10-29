@@ -1,7 +1,7 @@
 package com.cs601.project3.server.controllers;
 
 import com.cs601.project3.server.models.CRUD;
-import com.cs601.project3.server.models.Handler;
+import com.cs601.project3.server.models.EndpointHandlers;
 import com.cs601.project3.server.models.Request;
 import com.cs601.project3.server.models.Response;
 import org.junit.jupiter.api.Assertions;
@@ -9,19 +9,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class HandlerTest {
+class EndpointHandlersTest {
     final CRUD operation = CRUD.GET;
     final String path = "/chat";
-    Handler correctHandler;
-    Handler incorrectHandler;
+    EndpointHandlers correctHandler;
+    EndpointHandlers incorrectHandler;
 
     final String CALLBACK_OUTPUT = "OUTPUT";
     private static String callbackOutput = "";
 
     @BeforeEach
     void setUp() {
-        correctHandler = new Handler("/chat");
-        incorrectHandler = new Handler(null);
+        correctHandler = new EndpointHandlers("/chat");
+        incorrectHandler = new EndpointHandlers(null);
 
         correctHandler.setGETCallback(ExampleHandler::handle);
     }

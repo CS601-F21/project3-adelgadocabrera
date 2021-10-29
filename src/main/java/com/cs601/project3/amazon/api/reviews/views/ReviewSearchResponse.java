@@ -59,9 +59,9 @@ public class ReviewSearchResponse {
                         """
                 + review.getOverall() +
                 """
-                        /5 </span>
+                        /5 </span><span class="summary">
                         """ + review.getSummary() + """
-                </p>
+                </span></p>
                 <p>
                 """
                 + review.getReviewText() +

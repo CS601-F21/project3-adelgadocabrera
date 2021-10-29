@@ -156,7 +156,7 @@ class RouterTest {
     /**
      * Mock handlers
      */
-    private static class GetUser extends HttpHandler {
+    private static class GetUser implements HttpHandler {
         public void handle(Request req, Response res) {
             handlerOutput = HANDLER_OUTPUT;
             try {
@@ -170,7 +170,7 @@ class RouterTest {
     /**
      * Mock handlers
      */
-    private static class UpdateUser extends HttpHandler {
+    private static class UpdateUser implements HttpHandler {
         public void handle(Request req, Response res) {
             handlerOutput = HANDLER_OUTPUT;
             try {

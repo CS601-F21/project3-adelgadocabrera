@@ -9,7 +9,7 @@ import com.cs601.project3.server.models.Response;
 
 import java.io.IOException;
 
-public class SearchBarReviewTerm extends HttpHandler {
+public class SearchBarReviewTerm implements HttpHandler {
     public void handle(Request req, Response res) {
         String body = ReviewSearchResponse.hero();
         try {

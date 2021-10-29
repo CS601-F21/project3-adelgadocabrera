@@ -63,16 +63,8 @@ public class Server implements Runnable {
         }
     }
 
-    public void get(String path, HttpLambdaHandler callback) {
-        router.createHandler(CRUD.GET, path, callback);
-    }
-
     public void get(String path, HttpHandler callback) {
         router.createHandler(CRUD.GET, path, callback);
-    }
-
-    public void post(String path, HttpLambdaHandler callback) {
-        router.createHandler(CRUD.POST, path, callback);
     }
 
     public void post(String path, HttpHandler callback) {
@@ -113,17 +105,17 @@ public class Server implements Runnable {
             }
 
             // Get Handler for specified path
-            Handler handler = getHandler(request.getPath());
+            EndpointHandlers endpointHandlers = getHandler(request.getPath());
 
             // No path exists
-            if (handler == null) {
+            if (endpointHandlers == null) {
                 String pathNotFoundResponse = Html.build(HttpStatus.NOT_FOUND);
                 response.status(HttpStatus.NOT_FOUND).send(pathNotFoundResponse);
                 return;
             }
 
             // Execute handler callback in thread
-            HttpLambdaHandler callback = getCallback(request.getOperation(), handler);
+            HttpHandler callback = getCallback(request.getOperation(), endpointHandlers);
             if (callback != null) {
                 callback.handle(request, response);
             } else {
@@ -160,13 +152,13 @@ public class Server implements Runnable {
         return RequestParser.get(requestLine, headers.toString(), body.toString());
     }
 
-    private HttpLambdaHandler getCallback(CRUD operation, Handler handler) {
-        if (operation.equals(CRUD.GET)) return handler.getGETCallback();
-        if (operation.equals(CRUD.POST)) return handler.getPOSTCallback();
+    private HttpHandler getCallback(CRUD operation, EndpointHandlers endpointHandlers) {
+        if (operation.equals(CRUD.GET)) return endpointHandlers.getGETCallback();
+        if (operation.equals(CRUD.POST)) return endpointHandlers.getPOSTCallback();
         return null;
     }
 
-    private Handler getHandler(String path) {
+    private EndpointHandlers getHandler(String path) {
         return router.routes.get(path);
     }
 

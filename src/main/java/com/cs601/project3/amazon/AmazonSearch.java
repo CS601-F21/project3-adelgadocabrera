@@ -22,6 +22,7 @@ public class AmazonSearch {
     public static ReviewsFinder reviews;
     public static QAsFinder qas;
     private static Server app;
+    private static final int PORT = 8080;
 
     public static void main(String[] args) {
         initInvertedIndex(args);
@@ -30,9 +31,13 @@ public class AmazonSearch {
     }
 
     private static void initServer() {
-        app = new Server(8080);
+        app = new Server(PORT);
+
+        // reviewsearch endpoints
         app.get("/reviewsearch", Reviews.searchBarReviewTerm);
-        app.post("/reviewsearch", Reviews.searchReviews);
+        app.post("/reviewsearch", Reviews.reviewSearch);
+
+        // find endpoints
         app.get("/find", Reviews.searchBarAsin);
         app.post("/find", Reviews.find);
     }

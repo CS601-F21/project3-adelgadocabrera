@@ -32,15 +32,15 @@ class Delete {
             handler.handle(req, res);
         }
 
-        public void get(String path, HttpHandler handler) {
-            System.out.println("\nServer new path: " + path);
-            System.out.println("Executing handler: ");
-
-            String req = "This is your request!";
-            String res = "This is your response!";
-
-            handler.handle(req, res);
-        }
+//        public void get(String path, HttpHandler handler) {
+//            System.out.println("\nServer new path: " + path);
+//            System.out.println("Executing handler: ");
+//
+//            String req = "This is your request!";
+//            String res = "This is your response!";
+//
+//            handler.handle(req, res);
+//        }
     }
 
     // group handler
@@ -49,7 +49,7 @@ class Delete {
         public static AddEmail addEmail = new AddEmail();
         public static UpdateUsername updateUsername = new UpdateUsername();
 
-        public static class AddEmail extends HttpHandler {
+        public static class AddEmail implements HttpLambdaHandler {
             public void handle(String req, String res) {
                 System.out.println("Creating email");
                 System.out.println("Req " + req);
@@ -57,7 +57,7 @@ class Delete {
             }
         }
 
-        public static class UpdateUsername extends HttpHandler {
+        public static class UpdateUsername implements HttpLambdaHandler {
             public void handle(String req, String res) {
                 System.out.println("Changing username");
                 System.out.println("Req " + req);
@@ -77,10 +77,6 @@ class Delete {
             System.out.println("Response: " + res);
         }
 
-    }
-
-    public static abstract class HttpHandler {
-        abstract void handle(String req, String res);
     }
 
     // handles http request

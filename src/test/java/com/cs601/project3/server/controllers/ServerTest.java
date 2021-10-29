@@ -192,7 +192,7 @@ class ServerTest {
     /**
      * Mock handler
      */
-    public static class Post extends HttpHandler {
+    public static class Post implements HttpHandler {
         public void handle(Request req, Response res) {
             outputExample = POST_OUTPUT;
             postBody = POST_BODY;
@@ -209,7 +209,7 @@ class ServerTest {
     /**
      * Mock handler
      */
-    public static class Get extends HttpHandler {
+    public static class Get implements HttpHandler {
         public void handle(Request req, Response res) {
             outputExample = GET_OUTPUT;
             try {

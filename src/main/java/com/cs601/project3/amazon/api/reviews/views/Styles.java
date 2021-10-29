@@ -74,6 +74,12 @@ public class Styles {
                      
                              .stars {
                                  font-weight: bold;
+                                 font-size: 22px;
                              } 
+                             
+                             .summary {
+                                font-weight: 600;
+                                font-size: 20px;
+                             }
             """;
 }

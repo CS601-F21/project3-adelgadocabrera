@@ -13,7 +13,7 @@ import java.util.List;
 import static com.cs601.project3.amazon.api.reviews.Helpers.payloadHasQuery;
 import static com.cs601.project3.amazon.api.reviews.Helpers.sendBadRequest;
 
-public class Find extends HttpHandler {
+public class Find implements HttpHandler {
     public void handle(Request req, Response res) {
         String payload = req.getBody();
         String[] payloadParts = payload.trim().split("=");
