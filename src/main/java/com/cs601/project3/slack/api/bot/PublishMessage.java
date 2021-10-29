@@ -5,6 +5,7 @@ import com.cs601.project3.server.models.HttpStatus;
 import com.cs601.project3.server.models.Request;
 import com.cs601.project3.server.models.Response;
 import com.cs601.project3.slack.api.bot.views.Form;
+import com.cs601.project3.slack.api.bot.views.PostResponse;
 
 import java.io.IOException;
 
@@ -29,7 +30,11 @@ public class PublishMessage implements HttpHandler {
         }
 
         String message = payloadParts[1];
-
-
+       
+        try {
+            res.status(HttpStatus.OK).send(PostResponse.response("Message sent successfully"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

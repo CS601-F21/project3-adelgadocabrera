@@ -29,7 +29,7 @@ public class AmazonSearch {
         initInvertedIndex(args);
         initServer();
 
-        System.out.println("Server starting at port " + PORT);
+        System.out.println("App listening in port " + PORT);
         app.run();
     }
 

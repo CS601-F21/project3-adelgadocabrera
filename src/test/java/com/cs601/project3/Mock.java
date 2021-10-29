@@ -1,5 +1,7 @@
 package com.cs601.project3;
 
+import com.cs601.project3.clientRequest.ClientRequest;
+import com.cs601.project3.clientRequest.ClientResponse;
 import com.cs601.project3.server.controllers.Server;
 import com.cs601.project3.server.models.CRUD;
 import com.cs601.project3.server.models.HttpStatus;

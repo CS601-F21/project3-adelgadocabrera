@@ -1,4 +1,4 @@
-package com.cs601.project3;
+package com.cs601.project3.clientRequest;
 
 public class ClientResponse {
     public final int statusCode;

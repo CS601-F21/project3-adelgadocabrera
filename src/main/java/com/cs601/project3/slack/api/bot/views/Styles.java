@@ -60,5 +60,11 @@ public class Styles {
                              .search-button:hover {
                                  background-color: rgb(75, 0, 130, 0.7);
                              }
+                             
+                             .response {
+                                text-align: center;
+                                color: rgb(75, 0, 130);
+                                margin-top: -100px;
+                             }
             """;
 }

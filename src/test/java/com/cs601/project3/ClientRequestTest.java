@@ -1,5 +1,7 @@
 package com.cs601.project3;
 
+import com.cs601.project3.clientRequest.ClientRequest;
+import com.cs601.project3.clientRequest.ClientResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package com.cs601.project3;
+package com.cs601.project3.clientRequest;
 
 import java.io.BufferedReader;
 import java.io.IOException;
