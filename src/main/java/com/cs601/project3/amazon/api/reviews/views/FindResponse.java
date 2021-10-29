@@ -23,7 +23,7 @@ public class FindResponse {
             <div class="container">
                     <h1>Amazon Reviews and QA</h1>
                     """ + form + """
-            </div> 
+            </div>
             """;
 
     private static final String startContainer = """

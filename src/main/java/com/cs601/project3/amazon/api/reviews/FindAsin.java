@@ -24,6 +24,7 @@ public class FindAsin implements HttpHandler {
             return;
         }
 
+        // Searched for an empty query - gets the hero in return
         if (payloadParts.length <= 1) {
             try {
                 res.status(HttpStatus.OK).send(FindResponse.hero());
