@@ -38,6 +38,7 @@ public class JsonParser<T extends Doc> {
         int counter = 0;
         try (BufferedReader b = Files.newBufferedReader(Paths.get(fileName), charset)) {
             System.out.println("Reading file: " + fileName + "... may take some time");
+            Gson gson = new Gson();
             String line = "";
             boolean isRunning = true;
 
@@ -48,7 +49,7 @@ public class JsonParser<T extends Doc> {
                     isRunning = false;
                     continue;
                 }
-                T element = parseJsonToString(line, counter, fileName);
+                T element = parseJsonToString(gson, line, counter, fileName);
                 if (element != null) store.add(element);
             }
 
@@ -66,9 +67,8 @@ public class JsonParser<T extends Doc> {
      * @param fileName
      * @return
      */
-    private T parseJsonToString(String line, int counter, String fileName) {
+    private T parseJsonToString(Gson gson, String line, int counter, String fileName) {
         try {
-            Gson gson = new Gson();
             return gson.fromJson(line, typeParameterClass);
         } catch (Exception e) {
             System.out.println(fileName + ": JSON object skipped at line " + counter + ". Reason: JSON object is mal-formed");
