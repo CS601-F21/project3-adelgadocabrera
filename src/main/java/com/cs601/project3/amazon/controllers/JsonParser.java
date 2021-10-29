@@ -33,7 +33,7 @@ public class JsonParser<T extends Doc> {
      * @param fileName
      * @return
      */
-    public JsonParserResponse<T> parse(String fileName) {
+    public JsonParserResponse<T> parse(String fileName, int maxNumberOfItems) {
         Charset charset = StandardCharsets.ISO_8859_1;
         int counter = 0;
         try (BufferedReader b = Files.newBufferedReader(Paths.get(fileName), charset)) {
@@ -41,7 +41,7 @@ public class JsonParser<T extends Doc> {
             String line = "";
             boolean isRunning = true;
 
-            while (isRunning) {
+            while (isRunning && counter < maxNumberOfItems) {
                 counter++;
                 line = b.readLine();
                 if (line == null) {

@@ -23,6 +23,7 @@ public class AmazonSearch {
     public static QAsFinder qas;
     private static Server app;
     private static final int PORT = 8080;
+    private static final int maxNumberOfItems = 10000;
 
     public static void main(String[] args) {
         initInvertedIndex(args);
@@ -54,8 +55,8 @@ public class AmazonSearch {
         String qasFile = fileNames.getQAs();
 
         try {
-            reviews = ReviewsFinder.build(reviewsFile);
-            qas = QAsFinder.build(qasFile);
+            reviews = ReviewsFinder.build(reviewsFile, maxNumberOfItems);
+            qas = QAsFinder.build(qasFile, maxNumberOfItems);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.exit(1);

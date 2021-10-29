@@ -27,9 +27,9 @@ public class QAsFinder extends DocsFinder<QA> {
      * @return
      * @throws Exception
      */
-    public static QAsFinder build(String fileName) throws Exception {
+    public static QAsFinder build(String fileName, int maxNumberOfItems) throws Exception {
         JsonParser<QA> parser = new JsonParser<>(QA.class);
-        JsonParserResponse<QA> parserResponse = parser.parse(fileName);
+        JsonParserResponse<QA> parserResponse = parser.parse(fileName, maxNumberOfItems);
 
         if (parserResponse.hasError()) {
             throw new Exception(parserResponse.getErrorMsg());
