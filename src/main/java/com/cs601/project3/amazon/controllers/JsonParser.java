@@ -20,24 +20,17 @@ import java.util.ArrayList;
  * @param <T>
  */
 public class JsonParser<T extends Doc> {
-    private final Class<T> typeParameterClass;
-    private final ArrayList<T> store = new ArrayList<>();
-
-
-    public JsonParser(Class<T> typeParameterClass) {
-        this.typeParameterClass = typeParameterClass;
-    }
-
     /**
      * Reads line by line and parses the string into json
      *
      * @param fileName
      * @return
      */
-    public JsonParserResponse<T> parse(String fileName, int maxNumberOfItems) {
+    public static <T extends Doc> JsonParserResponse<T> parse(Class<T> classType, String fileName, int maxNumberOfItems) {
         Charset charset = StandardCharsets.ISO_8859_1;
         int counter = 0;
         Gson gson = new Gson();
+        ArrayList<T> store = new ArrayList<>();
 
         try (BufferedReader b = Files.newBufferedReader(Paths.get(fileName), charset)) {
             System.out.println("\nReading file: " + fileName + "... may take some time\n");
@@ -45,7 +38,7 @@ public class JsonParser<T extends Doc> {
             String line = b.readLine();
             while (line != null && counter < maxNumberOfItems) {
                 counter++;
-                T element = gson.fromJson(line, typeParameterClass);
+                T element = gson.fromJson(line, classType);
                 if (element != null) store.add(element);
                 line = b.readLine();
             }

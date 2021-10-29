@@ -28,8 +28,7 @@ public class ReviewsFinder extends DocsFinder<Review> {
      * @throws Exception
      */
     public static ReviewsFinder build(String fileName, int maxNumberOfItems) throws Exception {
-        JsonParser<Review> parser = new JsonParser<>(Review.class);
-        JsonParserResponse<Review> parserResponse = parser.parse(fileName, maxNumberOfItems);
+        JsonParserResponse<Review> parserResponse = JsonParser.parse(Review.class, fileName, maxNumberOfItems);
 
         if (parserResponse.hasError()) {
             throw new Exception(parserResponse.getErrorMsg());
