@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public class ClientRequest {
     public static ClientResponse get(String href) throws IOException {
@@ -52,7 +53,11 @@ public class ClientRequest {
 
     private static ClientResponse response(HttpURLConnection con) throws IOException {
         // prepare request response
-        int responseCode = con.getResponseCode();
+        final String method = con.getRequestMethod();
+        final int responseCode = con.getResponseCode();
+        final List<String> requestLine = con.getHeaderFields().get(null);
+        final String protocol = requestLine.get(0).split(" ")[0];
+
         final StringBuilder response = new StringBuilder();
 
         if ((con.getResponseCode() < 200) || (con.getResponseCode() >= 300)) {
@@ -64,7 +69,7 @@ public class ClientRequest {
             }
             in.close();
 
-            return new ClientResponse(responseCode, response.toString());
+            return new ClientResponse(responseCode, response.toString(), method, protocol);
         }
 
         if (responseCode == HttpURLConnection.HTTP_OK) { // success
@@ -76,10 +81,10 @@ public class ClientRequest {
             }
             in.close();
 
-            return new ClientResponse(responseCode, response.toString());
+            return new ClientResponse(responseCode, response.toString(), method, protocol);
         }
 
         String body = "Client request didn't get a response";
-        return new ClientResponse(responseCode, body);
+        return new ClientResponse(responseCode, body, method, protocol);
     }
 }

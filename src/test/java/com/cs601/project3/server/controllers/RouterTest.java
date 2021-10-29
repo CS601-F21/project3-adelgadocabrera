@@ -1,6 +1,6 @@
 package com.cs601.project3.server.controllers;
 
-import com.cs601.project3.ClientRequest;
+import com.cs601.project3.Mock;
 import com.cs601.project3.server.models.*;
 import com.cs601.project3.server.views.Html;
 import org.junit.jupiter.api.*;
@@ -17,7 +17,6 @@ import java.io.IOException;
  * HttpHandlers are more elegant and are defined seperately
  */
 class RouterTest {
-    // app 
     Server app;
     private static final int PORT = 5000;
     final String PATH = "/path";
@@ -28,26 +27,19 @@ class RouterTest {
     static String handlerOutput = null;
     static String RESPONSE = Html.build("RESPONSE");
 
-    // threads
-    Thread serverThread;
-    Thread clientThread;
-
     @BeforeEach
     void setUp() {
         app = new Server(PORT);
-        serverThread = new Thread(app);
     }
 
     @AfterEach
-    void clean() throws IOException, InterruptedException {
+    void cleanUp() throws IOException, InterruptedException {
         handlerOutput = null;
-        if (app != null) app.shutdown();
-        if (serverThread != null) serverThread.stop();
-        if (clientThread != null) clientThread.stop();
+        app.shutdown();
     }
 
     @Test
-    @DisplayName("should not throw error when adding lambdad handler")
+    @DisplayName("should not throw error when adding lambda handler")
     void addHttpHandler() {
         Assertions.assertDoesNotThrow(() -> app.get(PATH, (req, res) -> UserApi.updateUser.handle(req, res)));
     }
@@ -62,7 +54,7 @@ class RouterTest {
     @DisplayName("Should create GET handler with http handler")
     void getHttpHandler() {
         app.get(PATH, UserApi.getUser); // add handler
-        mockRequest(CRUD.GET); // make request
+        Mock.request(app, CRUD.GET, URL); // make request
 
         Assertions.assertEquals(HANDLER_OUTPUT, handlerOutput);
     }
@@ -81,7 +73,7 @@ class RouterTest {
             }
         });
 
-        mockRequest(CRUD.GET); // mock request
+        Mock.request(app, CRUD.GET, URL); // mock request
 
         Assertions.assertEquals(HANDLER_OUTPUT, handlerOutput);
     }
@@ -90,7 +82,7 @@ class RouterTest {
     @DisplayName("Should create POST handler with http handler")
     void postHttpHandler() {
         app.post(PATH, UserApi.updateUser);
-        mockRequest(CRUD.POST); // mock request
+        Mock.request(app, CRUD.POST, URL); // mock request
 
         Assertions.assertEquals(HANDLER_OUTPUT, handlerOutput);
     }
@@ -108,50 +100,11 @@ class RouterTest {
             }
         });
 
-        mockRequest(CRUD.POST); // mock request
+        Mock.request(app, CRUD.POST, URL); // mock request
 
         Assertions.assertEquals(HANDLER_OUTPUT, handlerOutput);
     }
 
-    /**
-     * Performs client mock request
-     *
-     * @param operation
-     */
-    void mockRequest(CRUD operation) {
-        clientThread = new Thread(() -> {
-            try {
-                if (operation.equals(CRUD.GET)) ClientRequest.get(URL);
-                if (operation.equals(CRUD.POST)) ClientRequest.post(URL, "");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        // run server && client request
-        execute();
-    }
-
-    /**
-     * Runs server and client threads and waits for them to finish.
-     * Ensures client request to server is performed.
-     */
-    void execute() {
-        try {
-            // start server
-            serverThread.start();
-
-            // make client query
-            clientThread.start();
-
-            // stop threads
-            clientThread.join();
-            app.shutdown(); // shutdown server before stopping thread
-            serverThread.join();
-        } catch (InterruptedException | IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * Mock handlers

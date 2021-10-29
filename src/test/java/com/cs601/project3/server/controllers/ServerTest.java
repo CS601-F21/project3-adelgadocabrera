@@ -52,7 +52,7 @@ class ServerTest {
 
     @Test
     @DisplayName("Should return METHOD NOT ALLOWED when performing a non GET/POST request")
-    void notAllowed() throws InterruptedException {
+    void notAllowed() {
         clientThread = new Thread(() -> {
             try {
                 ClientResponse response = ClientRequest.put(URL, POST_BODY);
@@ -66,8 +66,8 @@ class ServerTest {
     }
 
     @Test
-    @DisplayName("Should return METHOD NOT FOUND when performing a request with no defined handler")
-    void notFound() throws InterruptedException {
+    @DisplayName("Should return NOT FOUND when performing a request with no defined handler")
+    void notFound() {
         clientThread = new Thread(() -> {
             try {
                 ClientResponse response = ClientRequest.get("http://localhost:5000");
@@ -81,23 +81,7 @@ class ServerTest {
     }
 
     @Test
-    @DisplayName("Should return METHOD NOT FOUND when performing request to path that exists but bad operation")
-    void nullHandler() {
-        app.get(PATH, TestExample.get);
-        clientThread = new Thread(() -> {
-            try {
-                ClientResponse response = ClientRequest.post(URL, "");
-                Assertions.assertEquals(404, response.statusCode);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        execute();
-    }
-
-    @Test
-    @DisplayName("Should return METHOD NOT FOUND when performing request to path that exists but bad operation")
+    @DisplayName("Should return NOT FOUND when performing request to path that exists but not the method")
     void badRequest() {
         app.get(PATH, TestExample.get);
         clientThread = new Thread(() -> {
