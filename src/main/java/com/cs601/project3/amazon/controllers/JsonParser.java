@@ -5,6 +5,7 @@ import com.cs601.project3.amazon.models.JsonParserResponse;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -36,43 +37,22 @@ public class JsonParser<T extends Doc> {
     public JsonParserResponse<T> parse(String fileName, int maxNumberOfItems) {
         Charset charset = StandardCharsets.ISO_8859_1;
         int counter = 0;
-        try (BufferedReader b = Files.newBufferedReader(Paths.get(fileName), charset)) {
-            System.out.println("Reading file: " + fileName + "... may take some time");
-            Gson gson = new Gson();
-            String line = "";
-            boolean isRunning = true;
+        Gson gson = new Gson();
 
-            while (isRunning && counter < maxNumberOfItems) {
+        try (BufferedReader b = Files.newBufferedReader(Paths.get(fileName), charset)) {
+            System.out.println("\nReading file: " + fileName + "... may take some time\n");
+
+            String line = b.readLine();
+            while (line != null && counter < maxNumberOfItems) {
                 counter++;
-                line = b.readLine();
-                if (line == null) {
-                    isRunning = false;
-                    continue;
-                }
-                T element = parseJsonToString(gson, line, counter, fileName);
+                T element = gson.fromJson(line, typeParameterClass);
                 if (element != null) store.add(element);
+                line = b.readLine();
             }
 
             return JsonParserResponse.successful(store);
-        } catch (Exception e) {
+        } catch (IOException e) {
             return JsonParserResponse.failed("\nSomething went wrong reading file " + fileName);
-        }
-    }
-
-    /**
-     * Parses JSON object
-     *
-     * @param line
-     * @param counter
-     * @param fileName
-     * @return
-     */
-    private T parseJsonToString(Gson gson, String line, int counter, String fileName) {
-        try {
-            return gson.fromJson(line, typeParameterClass);
-        } catch (Exception e) {
-            System.out.println(fileName + ": JSON object skipped at line " + counter + ". Reason: JSON object is mal-formed");
-            return null;
         }
     }
 }
