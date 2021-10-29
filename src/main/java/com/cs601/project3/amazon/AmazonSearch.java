@@ -23,13 +23,13 @@ public class AmazonSearch {
     public static QAsFinder qas;
     private static Server app;
     private static final int PORT = 8080;
-    private static final int maxNumberOfItems = 1000;
+    private static final int maxNumberOfItems = 1;
 
     public static void main(String[] args) {
         initInvertedIndex(args);
         initServer();
 
-        System.out.println("Server running!");
+        System.out.println("Server starting at port " + PORT);
         app.run();
     }
 
