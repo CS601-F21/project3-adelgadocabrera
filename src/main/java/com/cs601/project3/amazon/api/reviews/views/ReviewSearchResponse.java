@@ -23,13 +23,6 @@ public class ReviewSearchResponse {
             </div> 
             """;
 
-    private static final String startContainer = """
-            <div class="container">
-            """;
-    private static final String endContainer = """
-            </div>
-            """;
-
     public static String hero() {
         return Html.build(Styles.css, hero);
     }
@@ -38,11 +31,11 @@ public class ReviewSearchResponse {
         ArrayList<Review> reviews = getReviewsFromStrings(stringifiedReviews);
         StringBuilder body = new StringBuilder();
         body.append(hero);
-        body.append(startContainer);
+        body.append(Common.startContainer);
         for (Review review : reviews) {
             body.append(reviewCard(review));
         }
-        body.append(endContainer);
+        body.append(Common.endContainer);
 
         return Html.build(Styles.css, body.toString());
     }

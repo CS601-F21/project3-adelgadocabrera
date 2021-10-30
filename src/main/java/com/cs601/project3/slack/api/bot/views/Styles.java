@@ -66,5 +66,13 @@ public class Styles {
                                 color: rgb(75, 0, 130);
                                 margin-top: -100px;
                              }
+                             
+                             .card {
+                                 padding: 30px 40px;
+                                 background-color: #f3f3f3;
+                                 border-radius: 5px;
+                                 margin-bottom: 20px;
+                                 text-align: left;
+                             }
             """;
 }

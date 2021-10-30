@@ -26,13 +26,6 @@ public class FindResponse {
             </div>
             """;
 
-    private static final String startContainer = """
-            <div class="container">
-            """;
-    private static final String endContainer = """
-            </div>
-            """;
-
     public static String hero() {
         return Html.build(Styles.css, hero);
     }
@@ -42,14 +35,14 @@ public class FindResponse {
         ArrayList<QA> qas = getQAsFromStrings(stringifiedQAs);
         StringBuilder body = new StringBuilder();
         body.append(hero);
-        body.append(startContainer);
+        body.append(Common.startContainer);
         for (Review review : reviews) {
             body.append(reviewCard(review));
         }
         for (QA qa : qas) {
             body.append(qaCard(qa));
         }
-        body.append(endContainer);
+        body.append(Common.endContainer);
 
         return Html.build(Styles.css, body.toString());
     }

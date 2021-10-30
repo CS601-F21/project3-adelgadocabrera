@@ -2,6 +2,8 @@ package com.cs601.project3.slack.api.bot.views;
 
 import com.cs601.project3.server.views.Html;
 
+import java.util.ArrayList;
+
 public class Form {
     static final String form = """
                         <form class="input-wrapper" action="/slackbot" method="post">
@@ -18,7 +20,7 @@ public class Form {
             </div>
             """;
 
-    public static String hero() {
-        return Html.build(Styles.css, hero);
+    public static String heroWithPastMessages(ArrayList<String> listOfSentMessages) {
+        return Html.build(Styles.css, hero + Common.sentMessages(listOfSentMessages));
     }
 }

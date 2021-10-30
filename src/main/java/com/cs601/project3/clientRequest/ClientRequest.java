@@ -28,6 +28,23 @@ public class ClientRequest {
         return response(con);
     }
 
+    public static ClientResponse post(String href, String data, List<String> headers) throws IOException {
+        HttpURLConnection con = connect("POST", href);
+
+        // expecting headers to come in format <header>:<value>
+        for (String header : headers) {
+            String[] headerParts = header.split(":");
+            con.setRequestProperty(headerParts[0].trim(), headerParts[1].trim());
+        }
+        con.setDoOutput(true);
+        try (OutputStream os = con.getOutputStream()) {
+            byte[] input = data.getBytes(StandardCharsets.UTF_8);
+            os.write(input, 0, input.length);
+        }
+        con.connect();
+        return response(con);
+    }
+
     public static ClientResponse put(String href, String data) throws IOException {
         HttpURLConnection con = connect("PUT", href);
         con.setDoOutput(true);
