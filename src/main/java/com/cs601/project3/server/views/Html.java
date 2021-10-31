@@ -6,7 +6,7 @@ public class Html {
                 <!DOCTYPE html>
                 <html lang="en">
                     <head>
-                        <title>Super Alberto's App</title>
+                        <title>adelgadocabrera</title>
                     </head>
                     <body>""" +
                 body + """
@@ -20,7 +20,7 @@ public class Html {
                 <!DOCTYPE html>
                 <html lang="en">
                     <head>
-                        <title>Super Alberto's App</title>
+                        <title>adelgadocabrera</title>
                            <style>
                         """
                 + style +
