@@ -58,7 +58,9 @@ public class Server implements Runnable {
                 Socket sock = server.accept();
                 threadPool.execute(() -> serverLogic(sock));
             } catch (IOException e) {
-                System.err.println("Server closed!");
+                // this will give an exception when
+                // the server is shutdown because it will
+                // interrupt sock.accept()
             }
         }
     }
@@ -72,13 +74,24 @@ public class Server implements Runnable {
     }
 
 
-    public void shutdown() throws InterruptedException, IOException {
+    public void shutdown() {
         running = false;
-        threadPool.shutdown();
-        if (!threadPool.awaitTermination(THREAD_POOL_TIMEOUT, TimeUnit.SECONDS)) {
-            System.err.println("Thread didn't finish in " + THREAD_POOL_TIMEOUT + " seconds");
-        }
-        server.close();
+        new Thread(() -> {
+            threadPool.shutdown();
+            try {
+                if (!threadPool.awaitTermination(THREAD_POOL_TIMEOUT, TimeUnit.SECONDS)) {
+                    System.err.println("Thread didn't finish in " + THREAD_POOL_TIMEOUT + " seconds");
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                server.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     private void serverLogic(Socket sock) {
@@ -124,6 +137,8 @@ public class Server implements Runnable {
                 response.status(HttpStatus.NOT_FOUND).send(pathNotFoundResponse);
             }
 
+            // close socket
+            sock.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

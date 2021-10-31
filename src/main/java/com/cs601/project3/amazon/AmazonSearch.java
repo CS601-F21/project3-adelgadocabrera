@@ -1,6 +1,7 @@
 package com.cs601.project3.amazon;
 
 import com.cs601.project3.amazon.api.Reviews;
+import com.cs601.project3.amazon.api.Shutdown;
 import com.cs601.project3.amazon.controllers.ArgsParser;
 import com.cs601.project3.amazon.controllers.QAsFinder;
 import com.cs601.project3.amazon.controllers.ReviewsFinder;
@@ -31,6 +32,7 @@ public class AmazonSearch {
 
         System.out.println("App listening in port " + PORT);
         app.run();
+        System.out.println("Server shutdown.");
     }
 
     private static void initServer() {
@@ -43,6 +45,13 @@ public class AmazonSearch {
         // find endpoints
         app.get("/find", Reviews.searchBarFindAsin);
         app.post("/find", Reviews.findAsin);
+
+        // shutdown
+        app.get("/shutdown", new Shutdown());
+    }
+
+    public static void shutdown() {
+        app.shutdown();
     }
 
     public static void initInvertedIndex(String[] args) {

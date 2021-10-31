@@ -46,8 +46,6 @@ class ServerTest {
         outputExample = "";
         postBody = null;
         if (app != null) app.shutdown();
-        if (serverThread != null) serverThread.stop();
-        if (clientThread != null) clientThread.stop();
     }
 
     @Test
@@ -160,7 +158,7 @@ class ServerTest {
             clientThread.join();
             app.shutdown(); // shutdown server before stopping thread
             serverThread.join();
-        } catch (InterruptedException | IOException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

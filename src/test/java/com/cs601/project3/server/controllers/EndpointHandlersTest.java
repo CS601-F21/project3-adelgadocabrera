@@ -53,12 +53,6 @@ class EndpointHandlersTest {
         Assertions.assertEquals(CALLBACK_OUTPUT, callbackOutput);
     }
 
-    @Test
-    @DisplayName("Should have null Runnable callback")
-    void nullRunnable() {
-//        Assertions.assertNull(incorrectHandler.getCallback());
-    }
-
     private static class ExampleHandler {
         public static void handle(Request request, Response res) {
             callbackOutput = "OUTPUT";

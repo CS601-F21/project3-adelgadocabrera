@@ -48,7 +48,7 @@ public class Mock {
             clientThread.join();
             app.shutdown(); // shutdown server before stopping thread
             serverThread.join();
-        } catch (InterruptedException | IOException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

@@ -33,7 +33,7 @@ public class JsonParser<T extends Doc> {
         ArrayList<T> store = new ArrayList<>();
 
         try (BufferedReader b = Files.newBufferedReader(Paths.get(fileName), charset)) {
-            System.out.println("\nReading file: " + fileName + "... may take some time\n");
+            System.out.println("Reading file: " + fileName + "... may take some time");
 
             String line = b.readLine();
             while (line != null && counter < maxNumberOfItems) {
