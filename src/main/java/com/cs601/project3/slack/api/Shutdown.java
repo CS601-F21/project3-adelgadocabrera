@@ -1,11 +1,11 @@
-package com.cs601.project3.amazon.api;
+package com.cs601.project3.slack.api;
 
-import com.cs601.project3.amazon.AmazonSearch;
 import com.cs601.project3.server.models.HttpHandler;
 import com.cs601.project3.server.models.HttpStatus;
 import com.cs601.project3.server.models.Request;
 import com.cs601.project3.server.models.Response;
 import com.cs601.project3.server.views.Html;
+import com.cs601.project3.slack.Slack;
 
 import java.io.IOException;
 
@@ -18,6 +18,6 @@ public class Shutdown implements HttpHandler {
             e.printStackTrace();
         }
 
-        AmazonSearch.shutdown();
+        Slack.shutdown();
     }
 }
