@@ -12,6 +12,6 @@ public class PostResponse {
         body.append(msg);
         body.append(Common.containerEnd);
         body.append(Common.sentMessages(listOfSentMessages));
-        return Html.build(Styles.css, Html.build(body.toString()));
+        return Html.build(Styles.css, body.toString());
     }
 }

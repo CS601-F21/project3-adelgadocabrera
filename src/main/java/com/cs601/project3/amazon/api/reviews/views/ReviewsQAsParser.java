@@ -26,7 +26,7 @@ public class ReviewsQAsParser {
                     if (label.equals("answer")) answer = value;
                     if (label.equals("answerTime")) answerTime = value;
                 } catch (Exception e) {
-                    // catch if label or value doesn't exits due to incomplete json file
+                    // label or value doesn't exits due to incomplete json file
                 }
             }
 

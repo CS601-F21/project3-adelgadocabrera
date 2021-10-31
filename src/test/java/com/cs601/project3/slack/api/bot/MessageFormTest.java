@@ -1,43 +1,29 @@
-package com.cs601.project3.amazon.api.reviews;
+package com.cs601.project3.slack.api.bot;
 
 import com.cs601.project3.HtmlValidator;
 import com.cs601.project3.Mock;
-import com.cs601.project3.amazon.AmazonSearch;
-import com.cs601.project3.amazon.api.Reviews;
 import com.cs601.project3.clientRequest.ClientRequest;
 import com.cs601.project3.clientRequest.ClientResponse;
 import com.cs601.project3.server.controllers.Server;
 import com.cs601.project3.server.models.CRUD;
 import com.cs601.project3.server.models.HttpStatus;
+import com.cs601.project3.slack.api.Bot;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 
-class FindAsinTest {
-    // inverted index
-    static AmazonSearch amazonSearch;
-
-    // app 
+class MessageFormTest {
+    // app
     Server app;
-    private static final int PORT = 5000;
-    final String PATH = "/find";
+    private static final int PORT = 8000;
+    final String PATH = "/slackbot";
     final String URL = "http://localhost:" + PORT + PATH;
-
-    @BeforeAll
-    static void setUpInvertedIndex() {
-        String[] args = new String[4];
-        args[0] = "-reviews";
-        args[1] = "mock_reviews.txt";
-        args[2] = "-qa";
-        args[3] = "mock_qa.txt";
-        amazonSearch = new AmazonSearch();
-        AmazonSearch.initInvertedIndex(args);
-    }
 
     @BeforeEach
     void setUp() {
         app = new Server(PORT);
-        app.post(PATH, Reviews.findAsin);
+        app.get(PATH, Bot.messageForm);
+        app.post(PATH, Bot.publishMessage);
     }
 
     @AfterEach
@@ -48,7 +34,7 @@ class FindAsinTest {
     @Test
     @DisplayName("should not throw when calling endpoint")
     void postRequestDoesntThrow() {
-        Assertions.assertDoesNotThrow(() -> Mock.request(app, CRUD.POST, URL));
+        Assertions.assertDoesNotThrow(() -> Mock.request(app, CRUD.GET, URL));
     }
 
     @Test
@@ -58,10 +44,10 @@ class FindAsinTest {
         Thread clientThread = new Thread(() -> {
             ClientResponse res = null;
             try {
-                res = ClientRequest.post(URL, "asin=A24SYO10RBABLT");
+                res = ClientRequest.get(URL);
                 Assertions.assertEquals(200, res.statusCode);
                 Assertions.assertEquals(HttpStatus.VERSION, res.protocol);
-                Assertions.assertEquals("POST", res.method);
+                Assertions.assertEquals("GET", res.method);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -79,12 +65,13 @@ class FindAsinTest {
 
     @Test
     @DisplayName("should have correct xhtml body")
-    void hasCorrectBodyGET() throws IOException, InterruptedException {
+    void hasCorrectBody() throws IOException, InterruptedException {
         Thread serverThread = new Thread(app);
         Thread clientThread = new Thread(() -> {
             ClientResponse res = null;
             try {
-                res = ClientRequest.post(URL, "asin=B001QXDSMW");
+                res = ClientRequest.get(URL);
+                Assertions.assertEquals(200, res.statusCode);
                 Assertions.assertTrue(HtmlValidator.isValid(res.body));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -102,39 +89,14 @@ class FindAsinTest {
     }
 
     @Test
-    @DisplayName("should return BAD REQUEST because incorrect post body")
-    void badRequest() throws IOException, InterruptedException {
+    @DisplayName("should have correct xhtml body the 404 NOT FOUND response")
+    void hasCorrectBodyBadRequestResponse() throws IOException, InterruptedException {
         Thread serverThread = new Thread(app);
         Thread clientThread = new Thread(() -> {
             ClientResponse res = null;
             try {
-                res = ClientRequest.post(URL, "wrong=A24SYO10RBABLT");
-                Assertions.assertEquals(400, res.statusCode);
-                Assertions.assertEquals(HttpStatus.VERSION, res.protocol);
-                Assertions.assertEquals("POST", res.method);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        // start threads
-        serverThread.start();
-        clientThread.start();
-
-        // shut everything down
-        clientThread.join();
-        app.shutdown();
-        serverThread.join();
-    }
-
-    @Test
-    @DisplayName("should have xhtml bad request response with proper xhtml format")
-    void badRequestBodyFormat() throws IOException, InterruptedException {
-        Thread serverThread = new Thread(app);
-        Thread clientThread = new Thread(() -> {
-            ClientResponse res = null;
-            try {
-                res = ClientRequest.post(URL, "wrong=A24SYO10RBABLT");
+                res = ClientRequest.get(URL + "/hello");
+                Assertions.assertEquals(404, res.statusCode);
                 Assertions.assertTrue(HtmlValidator.isValid(res.body));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -150,4 +112,5 @@ class FindAsinTest {
         app.shutdown();
         serverThread.join();
     }
+
 }

@@ -65,7 +65,7 @@ public class PublishMessage implements HttpHandler {
 
             ClientResponse response = ClientRequest.post(ENDPOINT, apiBody, headers);
             if (response.statusCode == 200) {
-                listOfSentMessages.add(message);
+                listOfSentMessages.add(0, message);
                 res.status(HttpStatus.OK).send(PostResponse.response("Message sent successfully", listOfSentMessages));
             } else {
                 res.status(HttpStatus.OK).send(PostResponse.response("Oops! Something went wrong!", listOfSentMessages));
