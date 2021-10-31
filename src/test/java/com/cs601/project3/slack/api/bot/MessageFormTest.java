@@ -113,4 +113,29 @@ class MessageFormTest {
         serverThread.join();
     }
 
+    @Test
+    @DisplayName("should return METHOD NOT ALLOWED response")
+    void methodNotAllowed() throws IOException, InterruptedException {
+        Thread serverThread = new Thread(app);
+        Thread clientThread = new Thread(() -> {
+            ClientResponse res = null;
+            try {
+                res = ClientRequest.put(URL, "");
+                Assertions.assertEquals(405, res.statusCode);
+                Assertions.assertTrue(HtmlValidator.isValid(res.body));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        // start threads
+        serverThread.start();
+        clientThread.start();
+
+        // shut everything down
+        clientThread.join();
+        app.shutdown();
+        serverThread.join();
+    }
+
 }
