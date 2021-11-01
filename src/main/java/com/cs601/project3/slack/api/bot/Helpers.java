@@ -42,10 +42,11 @@ public class Helpers {
         StringBuilder message = new StringBuilder();
         boolean foundEqual = false;
         for (int i = 0; i < payload.length(); i++) {
-            if (foundEqual) message.append(payload.charAt(i));
-            if (payload.charAt(i) == '=') {
+            if (foundEqual)
+                message.append(payload.charAt(i));
+           
+            if (payload.charAt(i) == '=')
                 foundEqual = true;
-            }
         }
         return message.toString();
     }
