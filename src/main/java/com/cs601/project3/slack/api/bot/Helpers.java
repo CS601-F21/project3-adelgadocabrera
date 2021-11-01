@@ -32,6 +32,25 @@ public class Helpers {
     }
 
     /**
+     * Gets the body of the message. It handles if message
+     * has more than one occurrence of the symbol =
+     *
+     * @param payload
+     * @return
+     */
+    public static String getMessage(String payload) {
+        StringBuilder message = new StringBuilder();
+        boolean foundEqual = false;
+        for (int i = 0; i < payload.length(); i++) {
+            if (foundEqual) message.append(payload.charAt(i));
+            if (payload.charAt(i) == '=') {
+                foundEqual = true;
+            }
+        }
+        return message.toString();
+    }
+
+    /**
      * Sends a HTML BAD REQUEST response
      *
      * @param res

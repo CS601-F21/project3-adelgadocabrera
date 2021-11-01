@@ -70,7 +70,7 @@ public class PublishMessage implements HttpHandler {
         }
 
         // body
-        String message = java.net.URLDecoder.decode(payloadParts[1], StandardCharsets.UTF_8);
+        String message = java.net.URLDecoder.decode(Helpers.getMessage(payload), StandardCharsets.UTF_8);
         SlackMessage slackMessage = new SlackMessage(CHANNEL, message);
         Gson gson = new Gson();
         String apiBody = gson.toJson(slackMessage);
