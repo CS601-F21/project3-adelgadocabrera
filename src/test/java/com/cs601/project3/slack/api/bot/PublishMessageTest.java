@@ -27,7 +27,7 @@ class PublishMessageTest {
     }
 
     @AfterEach
-    void clean() throws IOException, InterruptedException {
+    void clean() {
         app.shutdown();
     }
 
@@ -39,7 +39,7 @@ class PublishMessageTest {
 
     @Test
     @DisplayName("should have correct headers")
-    void hasCorrectHeaders() throws IOException, InterruptedException {
+    void hasCorrectHeaders() throws InterruptedException {
         Thread serverThread = new Thread(app);
         Thread clientThread = new Thread(() -> {
             ClientResponse res = null;
@@ -65,7 +65,7 @@ class PublishMessageTest {
 
     @Test
     @DisplayName("should have correct xhtml body")
-    void hasCorrectBody() throws IOException, InterruptedException {
+    void hasCorrectBody() throws InterruptedException {
         Thread serverThread = new Thread(app);
         Thread clientThread = new Thread(() -> {
             ClientResponse res = null;
@@ -90,7 +90,7 @@ class PublishMessageTest {
 
     @Test
     @DisplayName("should return bad request because bad form message submission")
-    void badRequest() throws IOException, InterruptedException {
+    void badRequest() throws InterruptedException {
         Thread serverThread = new Thread(app);
         Thread clientThread = new Thread(() -> {
             ClientResponse res = null;
@@ -118,7 +118,7 @@ class PublishMessageTest {
 
     @Test
     @DisplayName("should have correct xhtml body the 404 NOT FOUND response")
-    void hasCorrectBodyBadRequestResponse() throws IOException, InterruptedException {
+    void hasCorrectBodyBadRequestResponse() throws InterruptedException {
         Thread serverThread = new Thread(app);
         Thread clientThread = new Thread(() -> {
             ClientResponse res = null;

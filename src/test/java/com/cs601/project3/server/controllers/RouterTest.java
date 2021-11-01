@@ -33,7 +33,7 @@ class RouterTest {
     }
 
     @AfterEach
-    void cleanUp() throws IOException, InterruptedException {
+    void cleanUp() {
         handlerOutput = null;
         app.shutdown();
     }

@@ -42,7 +42,7 @@ class ServerTest {
      * Making sure no threads are running after completing test
      */
     @AfterEach
-    void cleanUp() throws IOException, InterruptedException {
+    void cleanUp() {
         outputExample = "";
         postBody = null;
         if (app != null) app.shutdown();

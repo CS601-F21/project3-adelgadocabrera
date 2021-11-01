@@ -3,18 +3,12 @@ package com.cs601.project3.server.controllers;
 import com.cs601.project3.server.models.HttpStatus;
 import com.cs601.project3.server.models.Request;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class RequestParserTest {
     private static final String HTTP_HEADLINE_CORRECT = "GET / HTTP/1.1";
     private static final String HTTP_HEADLINE_INCORRECT = "GET / HTTPS/3.0";
-
-    @BeforeEach
-    void setUp() {
-
-    }
 
     @Test
     @DisplayName("Should have correct http protocol")

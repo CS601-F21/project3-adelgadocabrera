@@ -14,9 +14,6 @@ import org.junit.jupiter.api.*;
 import java.io.IOException;
 
 class SearchBarFindAsinTest {
-    // inverted index
-    static AmazonSearch amazonSearch;
-
     // app
     Server app;
     private static final int PORT = 5000;
@@ -30,7 +27,6 @@ class SearchBarFindAsinTest {
         args[1] = "mock_reviews.txt";
         args[2] = "-qa";
         args[3] = "mock_qa.txt";
-        amazonSearch = new AmazonSearch();
         AmazonSearch.initInvertedIndex(args);
     }
 
@@ -41,7 +37,7 @@ class SearchBarFindAsinTest {
     }
 
     @AfterEach
-    void clean() throws IOException, InterruptedException {
+    void clean() {
         app.shutdown();
     }
 
@@ -53,7 +49,7 @@ class SearchBarFindAsinTest {
 
     @Test
     @DisplayName("should have correct headers")
-    void hasCorrectHeaders() throws IOException, InterruptedException {
+    void hasCorrectHeaders() throws InterruptedException {
         Thread serverThread = new Thread(app);
         Thread clientThread = new Thread(() -> {
             ClientResponse res = null;
@@ -79,7 +75,7 @@ class SearchBarFindAsinTest {
 
     @Test
     @DisplayName("should have correct xhtml body")
-    void hasCorrectBody() throws IOException, InterruptedException {
+    void hasCorrectBody() throws InterruptedException {
         Thread serverThread = new Thread(app);
         Thread clientThread = new Thread(() -> {
             ClientResponse res = null;
@@ -105,7 +101,7 @@ class SearchBarFindAsinTest {
 
     @Test
     @DisplayName("should have correct xhtml body the 404 NOT FOUND response")
-    void hasCorrectBodyBadRequestResponse() throws IOException, InterruptedException {
+    void hasCorrectBodyBadRequestResponse() throws InterruptedException {
         Thread serverThread = new Thread(app);
         Thread clientThread = new Thread(() -> {
             ClientResponse res = null;

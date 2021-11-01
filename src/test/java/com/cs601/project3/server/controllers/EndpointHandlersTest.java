@@ -1,6 +1,5 @@
 package com.cs601.project3.server.controllers;
 
-import com.cs601.project3.server.models.CRUD;
 import com.cs601.project3.server.models.EndpointHandlers;
 import com.cs601.project3.server.models.Request;
 import com.cs601.project3.server.models.Response;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class EndpointHandlersTest {
-    final CRUD operation = CRUD.GET;
     final String path = "/chat";
     EndpointHandlers correctHandler;
     EndpointHandlers incorrectHandler;

@@ -14,10 +14,7 @@ import org.junit.jupiter.api.*;
 import java.io.IOException;
 
 class FindAsinTest {
-    // inverted index
-    static AmazonSearch amazonSearch;
-
-    // app 
+    // app
     Server app;
     private static final int PORT = 5000;
     final String PATH = "/find";
@@ -30,7 +27,6 @@ class FindAsinTest {
         args[1] = "mock_reviews.txt";
         args[2] = "-qa";
         args[3] = "mock_qa.txt";
-        amazonSearch = new AmazonSearch();
         AmazonSearch.initInvertedIndex(args);
     }
 
@@ -41,7 +37,7 @@ class FindAsinTest {
     }
 
     @AfterEach
-    void clean() throws IOException, InterruptedException {
+    void clean() {
         app.shutdown();
     }
 
@@ -53,7 +49,7 @@ class FindAsinTest {
 
     @Test
     @DisplayName("should have correct headers")
-    void hasCorrectHeaders() throws IOException, InterruptedException {
+    void hasCorrectHeaders() throws InterruptedException {
         Thread serverThread = new Thread(app);
         Thread clientThread = new Thread(() -> {
             ClientResponse res = null;
@@ -79,7 +75,7 @@ class FindAsinTest {
 
     @Test
     @DisplayName("should have correct xhtml body")
-    void hasCorrectBodyGET() throws IOException, InterruptedException {
+    void hasCorrectBodyGET() throws InterruptedException {
         Thread serverThread = new Thread(app);
         Thread clientThread = new Thread(() -> {
             ClientResponse res = null;
@@ -103,7 +99,7 @@ class FindAsinTest {
 
     @Test
     @DisplayName("should return BAD REQUEST because incorrect post body")
-    void badRequest() throws IOException, InterruptedException {
+    void badRequest() throws InterruptedException {
         Thread serverThread = new Thread(app);
         Thread clientThread = new Thread(() -> {
             ClientResponse res = null;
@@ -129,7 +125,7 @@ class FindAsinTest {
 
     @Test
     @DisplayName("should have xhtml bad request response with proper xhtml format")
-    void badRequestBodyFormat() throws IOException, InterruptedException {
+    void badRequestBodyFormat() throws InterruptedException {
         Thread serverThread = new Thread(app);
         Thread clientThread = new Thread(() -> {
             ClientResponse res = null;
@@ -153,7 +149,7 @@ class FindAsinTest {
 
     @Test
     @DisplayName("should return METHOD NOT ALLOWED response")
-    void methodNotAllowed() throws IOException, InterruptedException {
+    void methodNotAllowed() throws InterruptedException {
         Thread serverThread = new Thread(app);
         Thread clientThread = new Thread(() -> {
             ClientResponse res = null;
