@@ -6,8 +6,20 @@ import com.cs601.project3.server.views.Html;
 
 import java.io.IOException;
 
+/**
+ * @author Alberto Delgado Cabrera
+ * <p>
+ * Helper methods for handlers
+ */
 public class Helpers {
 
+    /**
+     * Checks whether request body is well-formed
+     *
+     * @param payload
+     * @param queryFlag
+     * @return
+     */
     public static boolean payloadHasQuery(String payload, String queryFlag) {
         if (payload == null) return false;
         if (payload.equals("")) return false;
@@ -19,6 +31,11 @@ public class Helpers {
         return true;
     }
 
+    /**
+     * Sends a HTML BAD REQUEST response
+     *
+     * @param res
+     */
     public static void sendBadRequest(Response res) {
         String body = Html.build(HttpStatus.BAD_REQUEST);
         try {

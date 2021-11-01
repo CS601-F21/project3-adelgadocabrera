@@ -16,20 +16,21 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author Alberto Delgado
  * <p>
- * Server is runnable but not necessarily has to run in separate thread.
- * It is made runnable, so it CAN be run in separate thread.
+ * Server is the main class that will run your server. It is designed to be blocking
+ * but implemented as Runnable, so you can run it in a separate thread if required.
  */
 public class Server implements Runnable {
     // server properties
     private volatile boolean running = true;
     private ServerSocket server;
-    private Router router = new Router();
+    private final Router router = new Router();
 
     // threads
     private final int THREAD_POOL_TIMEOUT = 30; // in seconds
     private final int THREAD_POOL_SIZE = 10;
     private final ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 
+    // Server expects a port number
     public Server(int port) {
         try {
             server = new ServerSocket(port);
@@ -39,18 +40,10 @@ public class Server implements Runnable {
     }
 
     /**
-     * It is possible to create a Router manually instead of using
-     * the one created by default in the server.
-     * <p>
-     * By adding the external router it will completely replace
-     * the default one. This is expected behavior.
-     *
-     * @param router
+     * Main method to run the server. It will block until
+     * it receives a request. Upon received request it will
+     * handle that request in a different thread in a thread pool.
      */
-    public void use(Router router) {
-        this.router = router;
-    }
-
     @Override
     public void run() {
         while (running) {
@@ -65,15 +58,32 @@ public class Server implements Runnable {
         }
     }
 
+    /**
+     * Creates a GET handler for a given path
+     *
+     * @param path
+     * @param callback
+     */
     public void get(String path, HttpHandler callback) {
         router.createHandler(CRUD.GET, path, callback);
     }
 
+    /**
+     * Creates a POST handler for a given path
+     *
+     * @param path
+     * @param callback
+     */
     public void post(String path, HttpHandler callback) {
         router.createHandler(CRUD.POST, path, callback);
     }
 
 
+    /**
+     * Shuts down the server. It closes it in a separate thread,
+     * so it does not interfere with the servers logic and gives
+     * some time to await termination of any ongoing client requests.
+     */
     public void shutdown() {
         running = false;
         new Thread(() -> {
@@ -94,6 +104,14 @@ public class Server implements Runnable {
         }).start();
     }
 
+    /**
+     * Main server logic. Handles the incoming client requests
+     * and executes the corresponding handler.
+     * <p>
+     * Also handles bad requests.
+     *
+     * @param sock
+     */
     private void serverLogic(Socket sock) {
         try (
                 BufferedReader inStream = new BufferedReader(new InputStreamReader(sock.getInputStream()));
@@ -120,14 +138,14 @@ public class Server implements Runnable {
             // Get Handler for specified path
             EndpointHandlers endpointHandlers = getHandler(request.getPath());
 
-            // No path exists
+            // Handle no path exists
             if (endpointHandlers == null) {
                 String pathNotFoundResponse = Html.build(HttpStatus.NOT_FOUND);
                 response.status(HttpStatus.NOT_FOUND).send(pathNotFoundResponse);
                 return;
             }
 
-            // Execute handler callback in thread
+            // Execute handler
             HttpHandler callback = getCallback(request.getOperation(), endpointHandlers);
             if (callback != null) {
                 callback.handle(request, response);
@@ -137,7 +155,7 @@ public class Server implements Runnable {
                 response.status(HttpStatus.NOT_FOUND).send(pathNotFoundResponse);
             }
 
-            // close socket
+            // close client request
             sock.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -145,6 +163,15 @@ public class Server implements Runnable {
 
     }
 
+    /**
+     * Helper method to build a Request object from the incoming socket request.
+     * Reads the request headline, the headers and the body.
+     *
+     * @param inStream
+     * @return
+     * @throws IOException
+     * @throws IllegalAccessException
+     */
     private Request getRequest(BufferedReader inStream) throws IOException, IllegalAccessException {
         // Get request line
         StringBuilder headers = new StringBuilder();
@@ -167,16 +194,35 @@ public class Server implements Runnable {
         return RequestParser.get(requestLine, headers.toString(), body.toString());
     }
 
+    /**
+     * Helper method to get the callback for a given endpoint handler
+     *
+     * @param operation
+     * @param endpointHandlers
+     * @return
+     */
     private HttpHandler getCallback(CRUD operation, EndpointHandlers endpointHandlers) {
         if (operation.equals(CRUD.GET)) return endpointHandlers.getGETCallback();
         if (operation.equals(CRUD.POST)) return endpointHandlers.getPOSTCallback();
         return null;
     }
 
+    /**
+     * Path getter
+     *
+     * @param path
+     * @return
+     */
     private EndpointHandlers getHandler(String path) {
         return router.routes.get(path);
     }
 
+    /**
+     * Checks if incoming Request has valid method Get or Post
+     *
+     * @param request
+     * @return
+     */
     private boolean isValidCRUDRequest(Request request) {
         CRUD operation = request.getOperation();
         return operation.equals(CRUD.GET) || operation.equals(CRUD.POST);

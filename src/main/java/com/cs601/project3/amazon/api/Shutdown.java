@@ -9,6 +9,11 @@ import com.cs601.project3.server.views.Html;
 
 import java.io.IOException;
 
+/**
+ * @author Alberto Delgado Cabrera
+ * <p>
+ * Handler to shutdown the server
+ */
 public class Shutdown implements HttpHandler {
     public void handle(Request req, Response res) {
         String body = Html.build("Server shutdown. Thank you commander.");

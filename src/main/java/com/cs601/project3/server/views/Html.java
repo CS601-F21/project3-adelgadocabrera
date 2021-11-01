@@ -1,6 +1,17 @@
 package com.cs601.project3.server.views;
 
+/**
+ * @author Alberto Delgado Cabrera
+ * <p>
+ * Creates and html template
+ */
 public class Html {
+    /**
+     * HTML template with given body
+     *
+     * @param body
+     * @return
+     */
     public static String build(String body) {
         return """
                 <!DOCTYPE html>
@@ -15,6 +26,13 @@ public class Html {
                 """;
     }
 
+    /**
+     * Html template with given body and given css properties
+     *
+     * @param style
+     * @param body
+     * @return
+     */
     public static String build(String style, String body) {
         return """
                 <!DOCTYPE html>

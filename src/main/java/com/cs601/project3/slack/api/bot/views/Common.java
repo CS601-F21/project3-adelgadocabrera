@@ -2,8 +2,12 @@ package com.cs601.project3.slack.api.bot.views;
 
 import java.util.ArrayList;
 
+/**
+ * @author Alberto Delgado Cabrera
+ * <p>
+ * HTML helpers for BOT's response
+ */
 public class Common {
-
     static final String containerStart = """
             <div class="container">
                 <div class="response">
@@ -20,6 +24,12 @@ public class Common {
                 </div>
             """;
 
+    /**
+     * Creates a list of cards with a sent message in it
+     *
+     * @param listOfSentMessages
+     * @return
+     */
     static String sentMessages(ArrayList<String> listOfSentMessages) {
         StringBuilder body = new StringBuilder();
         body.append(Common.containerStart);

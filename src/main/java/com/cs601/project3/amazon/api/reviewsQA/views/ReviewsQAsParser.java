@@ -1,4 +1,4 @@
-package com.cs601.project3.amazon.api.reviews.views;
+package com.cs601.project3.amazon.api.reviewsQA.views;
 
 import com.cs601.project3.amazon.models.QA;
 import com.cs601.project3.amazon.models.Review;
@@ -6,7 +6,18 @@ import com.cs601.project3.amazon.models.Review;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Alberto Delgado Cabrera
+ * <p>
+ * Parses the Reviews and QAs from strings into objects
+ */
 public class ReviewsQAsParser {
+    /**
+     * Builds a list of QAs from a given list of stringified QAs
+     *
+     * @param stringifiedQAs
+     * @return
+     */
     public static ArrayList<QA> getQAsFromStrings(List<String> stringifiedQAs) {
         ArrayList<QA> reviews = new ArrayList<>();
         for (String qa : stringifiedQAs) {
@@ -39,6 +50,12 @@ public class ReviewsQAsParser {
         return reviews;
     }
 
+    /**
+     * Builds a list of Reviews from a given list of stringified Reviews
+     *
+     * @param stringifiedReviews
+     * @return
+     */
     public static ArrayList<Review> getReviewsFromStrings(List<String> stringifiedReviews) {
         ArrayList<Review> reviews = new ArrayList<>();
         for (String review : stringifiedReviews) {

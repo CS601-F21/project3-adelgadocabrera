@@ -9,13 +9,34 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+/**
+ * @author Alberto Delgado Cabrera
+ * <p>
+ * Makes a HTTP request.
+ * Supported methos are GET, POST and PUT
+ */
 public class ClientRequest {
+    /**
+     * Makes a GET request
+     *
+     * @param href
+     * @return
+     * @throws IOException
+     */
     public static ClientResponse get(String href) throws IOException {
         HttpURLConnection con = connect("GET", href);
         con.connect();
         return response(con);
     }
 
+    /**
+     * Makes a POST request
+     *
+     * @param href
+     * @param data
+     * @return
+     * @throws IOException
+     */
     public static ClientResponse post(String href, String data) throws IOException {
         HttpURLConnection con = connect("POST", href);
         con.setRequestProperty("Content-Type", "text/plain");
@@ -28,6 +49,15 @@ public class ClientRequest {
         return response(con);
     }
 
+    /**
+     * Makes a post request with headers
+     *
+     * @param href
+     * @param data
+     * @param headers
+     * @return
+     * @throws IOException
+     */
     public static ClientResponse post(String href, String data, List<String> headers) throws IOException {
         HttpURLConnection con = connect("POST", href);
 
@@ -45,6 +75,14 @@ public class ClientRequest {
         return response(con);
     }
 
+    /**
+     * Makes a PUT request
+     *
+     * @param href
+     * @param data
+     * @return
+     * @throws IOException
+     */
     public static ClientResponse put(String href, String data) throws IOException {
         HttpURLConnection con = connect("PUT", href);
         con.setDoOutput(true);
@@ -52,22 +90,31 @@ public class ClientRequest {
         return response(con);
     }
 
+    /**
+     * Helper method to avoid repetition in HTTP requests.
+     * Sets the URL and establishes connection
+     *
+     * @param operation
+     * @param href
+     * @return
+     * @throws IOException
+     */
     private static HttpURLConnection connect(String operation, String href) throws IOException {
-        //create URL object
-        URL url = new URL(href);
-
-        //create secure connection
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-
-        // close connection upon finishing request
-        con.setRequestProperty("Connection", "close");
-
-        // set HTTP method
-        con.setRequestMethod(operation);
+        URL url = new URL(href); //create URL object
+        HttpURLConnection con = (HttpURLConnection) url.openConnection(); //create secure connection
+        con.setRequestProperty("Connection", "close"); // close connection upon finishing request
+        con.setRequestMethod(operation); // set HTTP method
 
         return con;
     }
 
+    /**
+     * Generates HTTP response and returns it in the form of ClientResponse
+     *
+     * @param con
+     * @return
+     * @throws IOException
+     */
     private static ClientResponse response(HttpURLConnection con) throws IOException {
         // prepare request response
         final String method = con.getRequestMethod();
@@ -77,6 +124,7 @@ public class ClientRequest {
 
         final StringBuilder response = new StringBuilder();
 
+        // create body for error scenario
         if ((con.getResponseCode() < 200) || (con.getResponseCode() >= 300)) {
             final BufferedReader in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
             String inputLine;
@@ -89,6 +137,7 @@ public class ClientRequest {
             return new ClientResponse(responseCode, response.toString(), method, protocol);
         }
 
+        // creates body of successful request
         if (responseCode == HttpURLConnection.HTTP_OK) { // success
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
             String inputLine;

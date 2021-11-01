@@ -1,7 +1,11 @@
 package com.cs601.project3.slack.api.bot.views;
 
+/**
+ * @author Alberto Delgado Cabrera
+ * <p>
+ * CSS for the BOTS responses
+ */
 public class Styles {
-
     public static String css = """
                       html,
                              body {

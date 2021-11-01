@@ -15,6 +15,15 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
+/**
+ * @author Alberto Delgado Cabrera
+ * <p>
+ * Publish messages to a Slack channel. Slack channel and token
+ * are defined in a .env file
+ * <p>
+ * After sending message, it will return feedback of whether the
+ * message was successful or not and a list of sent messages
+ */
 public class PublishMessage implements HttpHandler {
     ArrayList<String> listOfSentMessages;
 
@@ -32,16 +41,25 @@ public class PublishMessage implements HttpHandler {
         this.listOfSentMessages = listOfSentMessages;
     }
 
+    /**
+     * Publish message to Slack channel
+     *
+     * @param req
+     * @param res
+     */
     public void handle(Request req, Response res) {
         String payload = req.getBody();
         String[] payloadParts = payload.trim().split("=");
         String MESSAGE_FLAG = "message";
 
+        // if request is bad formed return BAD REQUEST
         if (!Helpers.payloadHasQuery(payload, MESSAGE_FLAG)) {
             Helpers.sendBadRequest(res);
             return;
         }
 
+        // if request has no message returns the hero again.
+        // this should be handled by FE in js
         if (payloadParts.length <= 1) {
             try {
                 res.status(HttpStatus.OK).send(Form.heroWithPastMessages(listOfSentMessages));
@@ -61,11 +79,11 @@ public class PublishMessage implements HttpHandler {
         ArrayList<String> headers = new ArrayList<>();
         headers.add("Authorization: Bearer " + TOKEN);
         headers.add("Content-type: application/json");
-        try {
 
+        try {
             ClientResponse response = ClientRequest.post(ENDPOINT, apiBody, headers);
             if (response.statusCode == 200) {
-                listOfSentMessages.add(0, message);
+                listOfSentMessages.add(0, message); // message history is sorted from newest to oldest
                 res.status(HttpStatus.OK).send(PostResponse.response("Message sent successfully", listOfSentMessages));
             } else {
                 res.status(HttpStatus.OK).send(PostResponse.response("Oops! Something went wrong!", listOfSentMessages));
@@ -75,13 +93,6 @@ public class PublishMessage implements HttpHandler {
         }
     }
 
-    private static class SlackMessage {
-        final String channel;
-        final String text;
-
-        SlackMessage(String channel, String text) {
-            this.channel = channel;
-            this.text = text;
-        }
+    private record SlackMessage(String channel, String text) {
     }
 }

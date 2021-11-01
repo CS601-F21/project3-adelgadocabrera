@@ -1,9 +1,9 @@
-package com.cs601.project3.amazon.api.reviews;
+package com.cs601.project3.amazon.api.reviewsQA;
 
 import com.cs601.project3.HtmlValidator;
 import com.cs601.project3.Mock;
 import com.cs601.project3.amazon.AmazonSearch;
-import com.cs601.project3.amazon.api.Reviews;
+import com.cs601.project3.amazon.api.ReviewsQA;
 import com.cs601.project3.clientRequest.ClientRequest;
 import com.cs601.project3.clientRequest.ClientResponse;
 import com.cs601.project3.server.controllers.Server;
@@ -37,7 +37,7 @@ class SearchBarReviewSearchTest {
     @BeforeEach
     void setUp() {
         app = new Server(PORT);
-        app.get(PATH, Reviews.searchBarReviewSearch);
+        app.get(PATH, ReviewsQA.searchBarReviewSearch);
     }
 
     @AfterEach

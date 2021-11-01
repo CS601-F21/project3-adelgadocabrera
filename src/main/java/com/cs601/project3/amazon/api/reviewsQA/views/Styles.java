@@ -1,5 +1,8 @@
-package com.cs601.project3.amazon.api.reviews.views;
+package com.cs601.project3.amazon.api.reviewsQA.views;
 
+/**
+ * CSS for the Reviews && QAs handlers
+ */
 public class Styles {
     public static String css = """
                       html,
@@ -75,7 +78,7 @@ public class Styles {
                              .stars {
                                  font-weight: bold;
                                  font-size: 22px;
-                             } 
+                             }
                              
                              .summary {
                                 font-weight: 600;
