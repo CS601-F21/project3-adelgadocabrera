@@ -19,6 +19,7 @@ class SearchBarReviewSearchTest {
     private static final int PORT = 5000;
     final String PATH = "/reviewsearch";
     final String URL = "http://localhost:" + PORT + PATH;
+    Thread serverThread;
 
     @BeforeAll
     static void setUpInvertedIndex() {
@@ -34,11 +35,14 @@ class SearchBarReviewSearchTest {
     void setUp() {
         app = new Server(PORT);
         app.get(PATH, ReviewsQA.searchBarReviewSearch);
+        serverThread = new Thread(app);
+        serverThread.start();
     }
 
     @AfterEach
-    void clean() {
+    void clean() throws InterruptedException {
         app.shutdown();
+        serverThread.join();
     }
 
     @Test
@@ -49,79 +53,43 @@ class SearchBarReviewSearchTest {
 
     @Test
     @DisplayName("should have correct headers")
-    void hasCorrectHeaders() throws InterruptedException {
-        Thread serverThread = new Thread(app);
-        Thread clientThread = new Thread(() -> {
-            ClientResponse res = null;
-            try {
-                res = ClientRequest.get(URL);
-                Assertions.assertEquals(200, res.statusCode);
-                Assertions.assertEquals(HttpStatus.VERSION, res.protocol);
-                Assertions.assertEquals("GET", res.method);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        // start threads
-        serverThread.start();
-        clientThread.start();
-
-        // shut everything down
-        clientThread.join();
-        app.shutdown();
-        serverThread.join();
+    void hasCorrectHeaders() {
+        ClientResponse res = null;
+        try {
+            res = ClientRequest.get(URL);
+            Assertions.assertEquals(200, res.statusCode);
+            Assertions.assertEquals(HttpStatus.VERSION, res.protocol);
+            Assertions.assertEquals("GET", res.method);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
     @DisplayName("should have correct xhtml body")
-    void hasCorrectBody() throws InterruptedException {
-        Thread serverThread = new Thread(app);
-        Thread clientThread = new Thread(() -> {
-            ClientResponse res = null;
-            try {
-                res = ClientRequest.get(URL);
-                Assertions.assertEquals(200, res.statusCode);
-                Assertions.assertTrue(HtmlValidator.isValid(res.body));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        // start threads
-        serverThread.start();
-        clientThread.start();
-
-        // shut everything down
-        clientThread.join();
-        app.shutdown();
-        serverThread.join();
+    void hasCorrectBody() {
+        ClientResponse res = null;
+        try {
+            res = ClientRequest.get(URL);
+            Assertions.assertEquals(200, res.statusCode);
+            Assertions.assertTrue(HtmlValidator.isValid(res.body));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
     @Test
     @DisplayName("should have correct xhtml body the 404 NOT FOUND response")
-    void hasCorrectBodyBadRequestResponse() throws InterruptedException {
-        Thread serverThread = new Thread(app);
-        Thread clientThread = new Thread(() -> {
-            ClientResponse res = null;
-            try {
-                res = ClientRequest.get(URL + "/hello");
-                Assertions.assertEquals(404, res.statusCode);
-                Assertions.assertTrue(HtmlValidator.isValid(res.body));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        // start threads
-        serverThread.start();
-        clientThread.start();
-
-        // shut everything down
-        clientThread.join();
-        app.shutdown();
-        serverThread.join();
+    void hasCorrectBodyBadRequestResponse() {
+        ClientResponse res = null;
+        try {
+            res = ClientRequest.get(URL + "/hello");
+            Assertions.assertEquals(404, res.statusCode);
+            Assertions.assertTrue(HtmlValidator.isValid(res.body));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

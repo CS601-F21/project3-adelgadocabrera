@@ -16,36 +16,27 @@ public class Mock {
         final String POST = "POST";
 
         Thread serverThread = new Thread(app);
-        Thread clientThread = new Thread(() -> {
-            ClientResponse res;
-            try {
-                if (operation.equals(CRUD.GET)) {
-                    res = ClientRequest.get(URL);
-                    // make sure protocols and methods are correct
-                    Assertions.assertEquals(HttpStatus.VERSION, res.protocol);
-                    Assertions.assertEquals(GET, res.method);
-                }
-                if (operation.equals(CRUD.POST)) {
-                    res = ClientRequest.post(URL, "");
-                    // make sure protocols and methods are correct
-                    Assertions.assertEquals(HttpStatus.VERSION, res.protocol);
-                    Assertions.assertEquals(POST, res.method);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        serverThread.start();
 
-        // run server && client request
+        ClientResponse res;
         try {
-            // start server
-            serverThread.start();
+            if (operation.equals(CRUD.GET)) {
+                res = ClientRequest.get(URL);
+                // make sure protocols and methods are correct
+                Assertions.assertEquals(HttpStatus.VERSION, res.protocol);
+                Assertions.assertEquals(GET, res.method);
+            }
+            if (operation.equals(CRUD.POST)) {
+                res = ClientRequest.post(URL, "");
+                // make sure protocols and methods are correct
+                Assertions.assertEquals(HttpStatus.VERSION, res.protocol);
+                Assertions.assertEquals(POST, res.method);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-            // make client query
-            clientThread.start();
-
-            // stop threads
-            clientThread.join();
+        try {
             app.shutdown(); // shutdown server before stopping thread
             serverThread.join();
         } catch (InterruptedException e) {

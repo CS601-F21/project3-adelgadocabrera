@@ -23,7 +23,6 @@ class ServerTest {
     // app && client threads
     Server app;
     Thread serverThread;
-    Thread clientThread;
 
     // data to be Asserted
     private static String outputExample = null;
@@ -32,66 +31,53 @@ class ServerTest {
     @BeforeEach
     void setUp() {
         app = new Server(PORT);
-        System.setProperty("http.keepAlive", "false");
-
-        // run server in thread
         serverThread = new Thread(app);
+        serverThread.start();
     }
 
     /**
      * Making sure no threads are running after completing test
      */
     @AfterEach
-    void cleanUp() {
+    void cleanUp() throws InterruptedException {
         outputExample = "";
         postBody = null;
-        if (app != null) app.shutdown();
+        app.shutdown();
+        serverThread.join();
     }
 
     @Test
     @DisplayName("Should return METHOD NOT ALLOWED when performing a non GET/POST request")
     void notAllowed() {
-        clientThread = new Thread(() -> {
-            try {
-                ClientResponse response = ClientRequest.put(URL, POST_BODY);
-                Assertions.assertEquals(405, response.statusCode);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        execute();
+        try {
+            ClientResponse response = ClientRequest.put(URL, POST_BODY);
+            Assertions.assertEquals(405, response.statusCode);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
     @DisplayName("Should return NOT FOUND when performing a request with no defined handler")
     void notFound() {
-        clientThread = new Thread(() -> {
-            try {
-                ClientResponse response = ClientRequest.get("http://localhost:5000");
-                Assertions.assertEquals(404, response.statusCode);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        execute();
+        try {
+            ClientResponse response = ClientRequest.get("http://localhost:5000");
+            Assertions.assertEquals(404, response.statusCode);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
     @DisplayName("Should return NOT FOUND when performing request to path that exists but not the method")
     void badRequest() {
         app.get(PATH, TestExample.get);
-        clientThread = new Thread(() -> {
-            try {
-                ClientResponse response = ClientRequest.post(URL, "");
-                Assertions.assertEquals(404, response.statusCode);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        execute();
+        try {
+            ClientResponse response = ClientRequest.post(URL, "");
+            Assertions.assertEquals(404, response.statusCode);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -101,17 +87,11 @@ class ServerTest {
         // create router && set routes
         app.get(PATH, TestExample.get);
 
-        // make client query in another thread
-        clientThread = new Thread(() -> {
-            try {
-                ClientRequest.get(URL);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        // run thread && client request
-        execute();
+        try {
+            ClientRequest.get(URL);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // Assert get handler changed value of outputExample
         Assertions.assertEquals(GET_OUTPUT, outputExample);
@@ -123,44 +103,17 @@ class ServerTest {
         // create router && set routes
         app.post(PATH, TestExample.post);
 
-        // make client query in another thread
-        clientThread = new Thread(() -> {
-            try {
-                ClientRequest.post(URL, POST_BODY);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        // run thread && client request
-        execute();
+        try {
+            ClientRequest.post(URL, POST_BODY);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // Assert post handler changed value of outputExample
         Assertions.assertEquals(POST_OUTPUT, outputExample);
 
         // Assert post handler got body of POST request
         Assertions.assertEquals(POST_BODY, postBody);
-    }
-
-    /**
-     * Runs server and client threads and waits for them to finish.
-     * Ensures client request to server is performed.
-     */
-    void execute() {
-        try {
-            // start server
-            serverThread.start();
-
-            // make client query
-            clientThread.start();
-
-            // stop threads
-            clientThread.join();
-            app.shutdown(); // shutdown server before stopping thread
-            serverThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     /**

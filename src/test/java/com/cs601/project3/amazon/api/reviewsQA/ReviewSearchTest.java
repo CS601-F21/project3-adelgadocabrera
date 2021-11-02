@@ -12,6 +12,7 @@ import com.cs601.project3.server.models.HttpStatus;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 class ReviewSearchTest {
     // app
@@ -19,6 +20,7 @@ class ReviewSearchTest {
     private static final int PORT = 5000;
     final String PATH = "/reviewsearch";
     final String URL = "http://localhost:" + PORT + PATH;
+    Thread serverThread;
 
     @BeforeAll
     static void setUpInvertedIndex() {
@@ -34,11 +36,15 @@ class ReviewSearchTest {
     void setUp() {
         app = new Server(PORT);
         app.post(PATH, ReviewsQA.reviewSearch);
+
+        serverThread = new Thread(app);
+        serverThread.start();
     }
 
     @AfterEach
-    void clean() {
+    void clean() throws InterruptedException {
         app.shutdown();
+        serverThread.join();
     }
 
     @Test
@@ -49,79 +55,45 @@ class ReviewSearchTest {
 
     @Test
     @DisplayName("should have correct headers")
-    void hasCorrectHeaders() throws InterruptedException {
-        Thread serverThread = new Thread(app);
-        Thread clientThread = new Thread(() -> {
-            ClientResponse res = null;
-            try {
-                res = ClientRequest.post(URL, "query=fantastically");
-                Assertions.assertEquals(200, res.statusCode);
-                Assertions.assertEquals(HttpStatus.VERSION, res.protocol);
-                Assertions.assertEquals("POST", res.method);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        // start threads
-        serverThread.start();
-        clientThread.start();
-
-        // shut everything down
-        clientThread.join();
-        app.shutdown();
-        serverThread.join();
+    void hasCorrectHeaders() {
+        ClientResponse res = null;
+        try {
+            res = ClientRequest.post(URL, "query=fantastically");
+            Assertions.assertEquals(200, res.statusCode);
+            Assertions.assertEquals(HttpStatus.VERSION, res.protocol);
+            Assertions.assertEquals("POST", res.method);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    @RepeatedTest(20)
+    @Test
     @DisplayName("should have correct xhtml body response")
     void hasCorrectBody() throws InterruptedException {
-        Thread serverThread = new Thread(app);
-        Thread clientThread = new Thread(() -> {
-            ClientResponse res = null;
-            try {
-                res = ClientRequest.post(URL, "query=B001QXDSMW");
-                Assertions.assertEquals(200, res.statusCode);
-                Assertions.assertTrue(HtmlValidator.isValid(res.body));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        TimeUnit.MILLISECONDS.sleep(500); // added this because it required some time to start server
 
-        // start threads
-        serverThread.start();
-        clientThread.start();
-
-        // shut everything down
-        clientThread.join();
-        app.shutdown();
-        serverThread.join();
+        ClientResponse res = null;
+        try {
+            res = ClientRequest.post(URL, "query=B001QXDSMW");
+            Assertions.assertEquals(200, res.statusCode);
+            Assertions.assertTrue(HtmlValidator.isValid(res.body));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
     @Test
     @DisplayName("should have correct xhtml body the BAD REQUEST response")
-    void hasCorrectBodyBadRequestResponse() throws InterruptedException {
-        Thread serverThread = new Thread(app);
-        Thread clientThread = new Thread(() -> {
-            ClientResponse res = null;
-            try {
-                res = ClientRequest.post(URL, "wrong=B001QXDSMW");
-                Assertions.assertEquals(400, res.statusCode);
-                Assertions.assertTrue(HtmlValidator.isValid(res.body));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        // start threads
-        serverThread.start();
-        clientThread.start();
-
-        // shut everything down
-        clientThread.join();
-        app.shutdown();
-        serverThread.join();
+    void hasCorrectBodyBadRequestResponse() {
+        ClientResponse res = null;
+        try {
+            res = ClientRequest.post(URL, "wrong=B001QXDSMW");
+            Assertions.assertEquals(400, res.statusCode);
+            Assertions.assertTrue(HtmlValidator.isValid(res.body));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
