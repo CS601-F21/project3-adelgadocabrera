@@ -58,7 +58,7 @@ class ReviewSearchTest {
     void hasCorrectHeaders() {
         ClientResponse res = null;
         try {
-            res = ClientRequest.post(URL, "query=fantastically");
+            res = ClientRequest.post(URL, "query=");
             Assertions.assertEquals(200, res.statusCode);
             Assertions.assertEquals(HttpStatus.VERSION, res.protocol);
             Assertions.assertEquals("POST", res.method);
@@ -74,7 +74,7 @@ class ReviewSearchTest {
 
         ClientResponse res = null;
         try {
-            res = ClientRequest.post(URL, "query=B001QXDSMW");
+            res = ClientRequest.post(URL, "query=the");
             Assertions.assertEquals(200, res.statusCode);
             Assertions.assertTrue(HtmlValidator.isValid(res.body));
         } catch (IOException e) {
@@ -88,7 +88,7 @@ class ReviewSearchTest {
     void hasCorrectBodyBadRequestResponse() {
         ClientResponse res = null;
         try {
-            res = ClientRequest.post(URL, "wrong=B001QXDSMW");
+            res = ClientRequest.post(URL, "wrong=the");
             Assertions.assertEquals(400, res.statusCode);
             Assertions.assertTrue(HtmlValidator.isValid(res.body));
         } catch (IOException e) {

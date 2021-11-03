@@ -2,6 +2,7 @@ package com.cs601.project3.amazon.api.reviewsQA.views;
 
 import com.cs601.project3.amazon.models.QA;
 import com.cs601.project3.amazon.models.Review;
+import org.apache.commons.text.StringEscapeUtils;
 
 /**
  * Common html items
@@ -25,12 +26,12 @@ public class Common {
                 <div class="card">
                     <label class="label">
                     """
-                + qa.getQuestion() +
+                + StringEscapeUtils.escapeHtml3(qa.getQuestion()) +
                 """
                         </label>
                             <p>
                             """
-                + qa.getAnswer() +
+                + StringEscapeUtils.escapeHtml3(qa.getAnswer()) +
                 """
                         </p>
                         <p class="date">
@@ -51,7 +52,7 @@ public class Common {
                 <div class="card">
                     <label class="label">
                     """
-                + review.getReviewerName() +
+                + StringEscapeUtils.escapeHtml3(review.getReviewerName()) +
                 """
                         </label>
                         <p><span class="stars">
@@ -59,11 +60,11 @@ public class Common {
                 + review.getOverall() +
                 """
                         /5 </span><span class="summary">
-                        """ + review.getSummary() + """
+                        """ + StringEscapeUtils.escapeHtml3(review.getSummary()) + """
                 </span></p>
                 <p>
                 """
-                + review.getReviewText() +
+                + StringEscapeUtils.escapeHtml3(review.getReviewText()) +
                 """
                         </p>
                         <p class="date">

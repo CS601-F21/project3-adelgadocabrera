@@ -10,6 +10,7 @@ import com.cs601.project3.server.views.Html;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 class ServerTest {
     private static final String GET_OUTPUT = "get_output";
@@ -27,6 +28,7 @@ class ServerTest {
     // data to be Asserted
     private static String outputExample = null;
     private static String postBody = null;
+    private static volatile boolean concurrent = true;
 
     @BeforeEach
     void setUp() {
@@ -122,6 +124,33 @@ class ServerTest {
     private static class TestExample {
         static Get get = new Get();
         static Post post = new Post();
+    }
+
+    @Test
+    @DisplayName("should handle multiple concurrent requests fine")
+    void concurrency() throws InterruptedException {
+        app.get(PATH, TestExample.get);
+
+        ArrayList<Thread> threads = new ArrayList<>();
+        for (int i = 0; i < 200; i++) {
+            Thread t = new Thread(() -> {
+                try {
+                    ClientResponse res = ClientRequest.get(URL);
+                    if (res.statusCode != 200) {
+                        concurrent = false;
+                    }
+                } catch (IOException e) {
+                    concurrent = false;
+                    e.printStackTrace();
+                }
+            });
+
+            threads.add(t);
+            t.start();
+        }
+
+        for (Thread t : threads) t.join();
+        Assertions.assertTrue(concurrent);
     }
 
     /**
