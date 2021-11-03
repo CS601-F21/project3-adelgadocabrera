@@ -83,7 +83,7 @@ class MessageFormTest {
 
     @Test
     @DisplayName("should return METHOD NOT ALLOWED response")
-    void methodNotAllowed() throws InterruptedException {
+    void methodNotAllowed() {
         ClientResponse res = null;
         try {
             res = ClientRequest.put(URL, "");
