@@ -11,6 +11,7 @@ import com.cs601.project3.slack.api.Bot;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 class PublishMessageTest {
     // app
@@ -44,13 +45,14 @@ class PublishMessageTest {
 
     @Test
     @DisplayName("should have correct headers")
-    void hasCorrectHeaders() {
+    void hasCorrectHeaders() throws InterruptedException {
+        TimeUnit.MILLISECONDS.sleep(500);
         ClientResponse res = null;
         try {
-            res = ClientRequest.get(URL);
+            res = ClientRequest.post(URL, "message=test+message");
             Assertions.assertEquals(200, res.statusCode);
             Assertions.assertEquals(HttpStatus.VERSION, res.protocol);
-            Assertions.assertEquals("GET", res.method);
+            Assertions.assertEquals("POST", res.method);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -58,7 +60,8 @@ class PublishMessageTest {
 
     @Test
     @DisplayName("should have correct xhtml body")
-    void hasCorrectBody() {
+    void hasCorrectBody() throws InterruptedException {
+        TimeUnit.MILLISECONDS.sleep(500);
         ClientResponse res = null;
         try {
             res = ClientRequest.post(URL, "message=test+message");
@@ -87,7 +90,8 @@ class PublishMessageTest {
 
     @Test
     @DisplayName("should have correct xhtml body the 404 NOT FOUND response")
-    void hasCorrectBodyBadRequestResponse() {
+    void hasCorrectBodyBadRequestResponse() throws InterruptedException {
+        TimeUnit.MILLISECONDS.sleep(500);
         ClientResponse res = null;
         try {
             res = ClientRequest.get(URL + "/hello");
@@ -97,5 +101,4 @@ class PublishMessageTest {
             e.printStackTrace();
         }
     }
-
 }

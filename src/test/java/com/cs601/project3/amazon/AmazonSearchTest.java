@@ -62,4 +62,48 @@ class AmazonSearchTest {
         Assertions.assertTrue(HtmlValidator.isValid(res.body));
         Assertions.assertEquals(HttpStatus.VERSION, res.protocol);
     }
+
+    @Test
+    @DisplayName("should return correct headers/body for GET /reviewsearch")
+    void getReviewSearch() throws IOException, InterruptedException {
+        TimeUnit.SECONDS.sleep(1);
+        ClientResponse res = ClientRequest.get(DOMAIN + "/reviewsearch");
+
+        Assertions.assertEquals(200, res.statusCode);
+        Assertions.assertEquals(HttpStatus.VERSION, res.protocol);
+        Assertions.assertTrue(HtmlValidator.isValid(res.body));
+    }
+
+    @Test
+    @DisplayName("should return correct headers/body for POST /reviewsearch")
+    void postReviewSearch() throws IOException, InterruptedException {
+        TimeUnit.SECONDS.sleep(1);
+        ClientResponse res = ClientRequest.post(DOMAIN + "/reviewsearch", "query=the");
+
+        Assertions.assertEquals(200, res.statusCode);
+        Assertions.assertEquals(HttpStatus.VERSION, res.protocol);
+        Assertions.assertTrue(HtmlValidator.isValid(res.body));
+    }
+
+    @Test
+    @DisplayName("should return correct headers/body for GET /find")
+    void getFind() throws IOException, InterruptedException {
+        TimeUnit.SECONDS.sleep(1);
+        ClientResponse res = ClientRequest.get(DOMAIN + "/find");
+
+        Assertions.assertEquals(200, res.statusCode);
+        Assertions.assertEquals(HttpStatus.VERSION, res.protocol);
+        Assertions.assertTrue(HtmlValidator.isValid(res.body));
+    }
+
+    @Test
+    @DisplayName("should return correct headers/body for POST /find")
+    void postFind() throws IOException, InterruptedException {
+        TimeUnit.SECONDS.sleep(1);
+        ClientResponse res = ClientRequest.post(DOMAIN + "/find", "asin=1466736038");
+
+        Assertions.assertEquals(200, res.statusCode);
+        Assertions.assertEquals(HttpStatus.VERSION, res.protocol);
+        Assertions.assertTrue(HtmlValidator.isValid(res.body));
+    }
 }

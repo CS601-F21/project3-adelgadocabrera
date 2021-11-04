@@ -56,4 +56,26 @@ class SlackTest {
         Assertions.assertEquals(HttpStatus.VERSION, res.protocol);
     }
 
+
+    @Test
+    @DisplayName("should return correct headers/body for GET /slackbot")
+    void getFind() throws IOException, InterruptedException {
+        TimeUnit.SECONDS.sleep(1);
+        ClientResponse res = ClientRequest.get(DOMAIN + "/slackbot");
+
+        Assertions.assertEquals(200, res.statusCode);
+        Assertions.assertEquals(HttpStatus.VERSION, res.protocol);
+        Assertions.assertTrue(HtmlValidator.isValid(res.body));
+    }
+
+    @Test
+    @DisplayName("should return correct headers/body for POST /slackbot")
+    void postFind() throws IOException, InterruptedException {
+        TimeUnit.SECONDS.sleep(1);
+        ClientResponse res = ClientRequest.post(DOMAIN + "/slackbot", "message=Hi+testing+team!");
+
+        Assertions.assertEquals(200, res.statusCode);
+        Assertions.assertEquals(HttpStatus.VERSION, res.protocol);
+        Assertions.assertTrue(HtmlValidator.isValid(res.body));
+    }
 }

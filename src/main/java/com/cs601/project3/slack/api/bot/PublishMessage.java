@@ -6,12 +6,14 @@ import com.cs601.project3.server.models.HttpHandler;
 import com.cs601.project3.server.models.HttpStatus;
 import com.cs601.project3.server.models.Request;
 import com.cs601.project3.server.models.Response;
+import com.cs601.project3.slack.api.bot.models.SlackResponse;
 import com.cs601.project3.slack.api.bot.views.Form;
 import com.cs601.project3.slack.api.bot.views.PostResponse;
 import com.google.gson.Gson;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
@@ -70,7 +72,7 @@ public class PublishMessage implements HttpHandler {
         }
 
         // body
-        String message = java.net.URLDecoder.decode(Helpers.getMessage(payload), StandardCharsets.UTF_8);
+        String message = URLDecoder.decode(Helpers.getMessage(payload), StandardCharsets.UTF_8);
         SlackMessage slackMessage = new SlackMessage(CHANNEL, message);
         Gson gson = new Gson();
         String apiBody = gson.toJson(slackMessage);
@@ -82,7 +84,8 @@ public class PublishMessage implements HttpHandler {
 
         try {
             ClientResponse response = ClientRequest.post(ENDPOINT, apiBody, headers);
-            if (response.statusCode == 200) {
+            boolean isSuccessful = gson.fromJson(response.body, SlackResponse.class).ok;
+            if (response.statusCode == 200 && isSuccessful) {
                 listOfSentMessages.add(0, message); // message history is sorted from newest to oldest
                 res.status(HttpStatus.OK).send(PostResponse.response("Message sent successfully", listOfSentMessages));
             } else {
