@@ -78,7 +78,6 @@ public class Server implements Runnable {
         router.createHandler(CRUD.POST, path, callback);
     }
 
-
     /**
      * Shuts down the server. It closes it in a separate thread,
      * so it does not interfere with the servers logic and gives

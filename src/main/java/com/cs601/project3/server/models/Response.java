@@ -47,7 +47,7 @@ public class Response {
         for (Map.Entry<String, String> entry : headers.entrySet()) {
             String headerKey = entry.getKey();
             String headerValue = entry.getValue();
-            header.append(headerKey).append(":").append(headerValue).append("\n");
+            header.append(headerKey).append("=").append(headerValue).append("\n");
         }
 
         String output = statusCode + header + "\n" + body;
